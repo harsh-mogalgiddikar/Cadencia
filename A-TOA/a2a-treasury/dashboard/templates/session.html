@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Session {{ session_id[:8] }}... — A2A Treasury{% endblock %}
+
+{% block content %}
+<h1>Session Detail</h1>
+
+<article>
+    <header>
+        <div class="grid-3">
+            <div>
+                <small>Status</small>
+                <p>
+                    {% if session.status == 'AGREED' %}
+                    <span class="badge badge-green">{{ session.status }}</span>
+                    {% elif session.status in ['WALKAWAY', 'TIMEOUT'] %}
+                    <span class="badge badge-red">{{ session.status }}</span>
+                    {% else %}
+                    <span class="badge badge-blue">{{ session.status }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <small>Rounds</small>
+                <p>{{ session.rounds }} / {{ session.max_rounds }}</p>
+            </div>
+            <div>
+                <small>Agreed Value</small>
+                <p>{{ session.agreed_value }}</p>
+            </div>
+        </div>
+    </header>
+    <div class="grid-3">
+        <div><small>Buyer</small><br>{{ session.buyer }}</div>
+        <div><small>Seller</small><br>{{ session.seller }}</div>
+        <div><small>FX Rate</small><br>{{ session.fx_rate }}</div>
+    </div>
+</article>
+
+<h2>Offer Timeline</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Round</th>
+            <th>Role</th>
+            <th>Value</th>
+            <th>Action</th>
+            <th>Confidence</th>
+            <th>Strategy</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in offers %}
+        <tr>
+            <td>{{ o.round }}</td>
+            <td>{{ o.role }}</td>
+            <td>{{ o.value }}</td>
+            <td>{{ o.action }}</td>
+            <td>{{ o.confidence }}</td>
+            <td>{{ o.strategy }}</td>
+            <td>{{ o.time }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if compliance %}
+<h2>Compliance</h2>
+<article>
+    <div class="grid-3">
+        <div>
+            <small>Status</small>
+            <p>
+                {% if compliance.status == 'EXEMPT' or compliance.status == 'COMPLIANT' %}
+                <span class="badge badge-green">{{ compliance.status }}</span>
+                {% elif compliance.status == 'WARNING' %}
+                <span class="badge badge-yellow">{{ compliance.status }}</span>
+                {% else %}
+                <span class="badge badge-red">{{ compliance.status }}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            <small>Purpose Code</small>
+            <p>{{ compliance.purpose_code }} — {{ compliance.purpose_label }}</p>
+        </div>
+        <div>
+            <small>Transaction Type</small>
+            <p>{{ compliance.transaction_type }}</p>
+        </div>
+    </div>
+    {% if compliance.warnings %}
+    <details>
+        <summary>Warnings ({{ compliance.warnings|length }})</summary>
+        <ul>
+            {% for w in compliance.warnings %}
+            <li style="color: #eab308;">{{ w }}</li>
+            {% endfor %}
+        </ul>
+    </details>
+    {% endif %}
+</article>
+{% endif %}
+
+{% if escrow %}
+<h2>Escrow</h2>
+<article>
+    <div class="grid-3">
+        <div>
+            <small>Contract</small>
+            <p style="word-break: break-all; font-size: 0.85rem;">{{ escrow.contract_ref }}</p>
+        </div>
+        <div>
+            <small>Status</small>
+            <p><span class="badge badge-green">{{ escrow.status }}</span></p>
+        </div>
+        <div>
+            <small>Mode</small>
+            <p>
+                {% if escrow.mode == 'LIVE' %}
+                <span class="badge badge-green">{{ escrow.mode }}</span>
+                {% else %}
+                <span class="badge badge-yellow">{{ escrow.mode }}</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <p><small>Amount: {{ escrow.amount }} | Network: {{ escrow.network }}</small></p>
+    {% if escrow.explorer %}
+    <a href="{{ escrow.explorer }}" target="_blank" role="button" class="outline">View on Explorer ↗</a>
+    {% endif %}
+</article>
+{% endif %}
+
+<h2>Audit Trail</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Action</th>
+            <th>Actor</th>
+            <th>Hash</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in audit_entries %}
+        <tr>
+            <td>{{ a.time }}</td>
+            <td>{{ a.action }}</td>
+            <td>{{ a.actor }}</td>
+            <td><code>{{ a.hash }}</code></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

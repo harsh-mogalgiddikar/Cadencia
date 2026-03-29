@@ -1,0 +1,26 @@
+# AlgoKit project configuration — A2A Treasury Network
+# TreasuryEscrow smart contract for trustless escrow on Algorand TestNet
+
+[algokit]
+min_version = "v2.0.0"
+
+[project]
+type = "contract"
+name = "treasury-escrow"
+artifacts = "blockchain/contracts/artifacts"
+
+[project.deploy]
+command = "python -m blockchain.contracts.deploy"
+environment_secrets = [
+    "ALGORAND_ESCROW_CREATOR_MNEMONIC",
+]
+
+[network]
+name = "testnet"
+algod_url = "https://testnet-api.algonode.cloud"
+indexer_url = "https://testnet-idx.algonode.cloud"
+
+[generate.smart_contract]
+description = "TreasuryEscrow — on-chain escrow for B2B trade settlement"
+path = "blockchain/contracts/treasury_escrow.py"
+language = "python"

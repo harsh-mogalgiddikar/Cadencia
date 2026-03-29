@@ -1,0 +1,303 @@
+﻿ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé A2A Treasury Network              Γöé
+Γöé Autonomous Negotiation Simulation Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+Γ£ô API healthy at http://localhost:8000
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 0 ΓÇö Setup ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Database + Redis cleared
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 1 ΓÇö Register Enterprises ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Buyer enterprise registered: 810f1d3d-1dba-44ec-81f4-2941b8005b52
+Γ£ô Seller enterprise registered: 375ab3be-71dc-44fc-aaa0-6977c61dfcb3
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 2 ΓÇö Verify Emails ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Buyer email verified
+Γ£ô Seller email verified
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 3 ΓÇö Login ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Buyer logged in
+Γ£ô Seller logged in
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 4 ΓÇö Activate Enterprises ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Buyer enterprise ACTIVE ΓÇö Agent Card provisioned
+Γ£ô Seller enterprise ACTIVE ΓÇö Agent Card provisioned
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 5 ΓÇö Configure Agents ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Buyer agent configured | reservation: Γé╣103,040 | target: Γé╣84,640 | ceiling: 
+Γé╣96,000
+Γ£ô Buyer treasury policy set
+Γ£ô Seller agent configured | reservation: Γé╣81,780 | target: Γé╣91,350
+Γ£ô Seller treasury policy set
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 6 ΓÇö Agent Cards ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Buyer Agent Card: Bharat Tech Imports Pvt Ltd Trade Agent
+Γ£ô Seller Agent Card: Delhi Exports Pvt Ltd Trade Agent
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 7 ΓÇö Create Negotiation Session ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ ≡ƒñ¥ Session ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé NEGOTIATION SESSION STARTED                                                 Γöé
+Γöé                                                                             Γöé
+Γöé   Session ID:  ad2be8b2-c91f-4540-a87e-d53197b91460                         Γöé
+Γöé   Buyer:       Bharat Tech Imports Pvt Ltd                                  Γöé
+Γöé   Seller:      Delhi Exports Pvt Ltd                                        Γöé
+Γöé   Opening:     Γé╣85,000                                                      Γöé
+Γöé   Max rounds:  8                                                            Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 8 ΓÇö Negotiation Rounds ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Autonomous negotiation started (202)
+ΓÅ│ Round 1 in progress... status=SELLER_RESPONSE terminal=False
+≡ƒö╡ BUYER  offered Γé╣85,000 (counter)
+≡ƒö┤ SELLER offered Γé╣95,918 (counter)
+ΓÅ│ Round 2 in progress... status=ROUND_LOOP terminal=False
+≡ƒö╡ BUYER  offered Γé╣90,270 (counter)
+ΓÅ│ Round 2 in progress... status=AGREED terminal=True
+≡ƒö┤ SELLER offered ΓÇö (accept)
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 9 ΓÇö Verification ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Session status: AGREED | is_terminal: True
+  Final agreed value: Γé╣90,270
+                       ≡ƒôï Offer History                       
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé Round Γöé  Role  Γöé   Value Γöé Action  Γöé Confidence Γöé Strategy Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé   1   Γöé buyer  Γöé Γé╣85,000 Γöé counter Γöé    1.00    Γöé  anchor  Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé   1   Γöé seller Γöé Γé╣95,918 Γöé counter Γöé    0.52    Γöé  anchor  Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé   1   Γöé buyer  Γöé Γé╣90,270 Γöé counter Γöé    0.69    Γöé  anchor  Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé   2   Γöé seller Γöé       ΓÇö Γöé accept  Γöé    0.95    Γöé concede  Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+
+≡ƒô£ Audit Transcript ΓÇö 18 entries
+  [2026-03-01T16:21:10] SESSION_CREATED           | actor: 810f1d3dΓÇª | hash: 
+6795dbad72b7ΓÇª
+  [2026-03-01T16:21:11] LLM_ADVISORY_USED         | actor: ad2be8b2ΓÇª | hash: 
+4717705f9e5dΓÇª
+  [2026-03-01T16:21:11] A2A_TASK_SUBMITTED        | actor: sellerΓÇª | hash: 
+5b1c7b55de12ΓÇª
+  [2026-03-01T16:21:11] OFFER_SUBMITTED           | actor: 375ab3beΓÇª | hash: 
+895dbe3ad10eΓÇª
+  [2026-03-01T16:21:11] A2A_TASK_COMPLETED        | actor: neutralΓÇª | hash: 
+e4e947dce26aΓÇª
+  [2026-03-01T16:21:11] A2A_TASK_COMPLETED        | actor: neutralΓÇª | hash: 
+da3c5a83c0aeΓÇª
+  [2026-03-01T16:21:14] LLM_ADVISORY_USED         | actor: ad2be8b2ΓÇª | hash: 
+b7e7715b1bbfΓÇª
+  [2026-03-01T16:21:14] A2A_TASK_SUBMITTED        | actor: buyerΓÇª | hash: 
+99fd84575de2ΓÇª
+  [2026-03-01T16:21:14] OFFER_SUBMITTED           | actor: 810f1d3dΓÇª | hash: 
+ecd91b27ab3aΓÇª
+  [2026-03-01T16:21:14] A2A_TASK_COMPLETED        | actor: neutralΓÇª | hash: 
+d36fc41d5014ΓÇª
+  [2026-03-01T16:21:14] A2A_TASK_COMPLETED        | actor: neutralΓÇª | hash: 
+8b6e37720278ΓÇª
+  [2026-03-01T16:21:17] LLM_ADVISORY_USED         | actor: ad2be8b2ΓÇª | hash: 
+3789bf3c9ec5ΓÇª
+  [2026-03-01T16:21:17] A2A_TASK_SUBMITTED        | actor: sellerΓÇª | hash: 
+b1d91bc1a9d1ΓÇª
+  [2026-03-01T16:21:17] OFFER_SUBMITTED           | actor: 375ab3beΓÇª | hash: 
+1f6a37972912ΓÇª
+  [2026-03-01T16:21:17] SESSION_AGREED            | actor: 375ab3beΓÇª | hash: 
+eeaf30635989ΓÇª
+  [2026-03-01T16:21:17] ESCROW_DEPLOYED           | actor: systemΓÇª | hash: 
+82230ddc8ccfΓÇª
+  [2026-03-01T16:21:17] A2A_TASK_COMPLETED        | actor: neutralΓÇª | hash: 
+8202b104b28eΓÇª
+  [2026-03-01T16:21:17] A2A_TASK_COMPLETED        | actor: neutralΓÇª | hash: 
+cbe898a4284fΓÇª
+Γ£ô SHA-256 hash chain integrity: VALID
+Γ£ô Server-side chain verification: valid=True | entries=9
+Γ£ô Buyer audit log: 5 entries
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 10 ΓÇö Guardrail Breach Test ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Test session: 9a28f768-249e-4d57-ad10-07a9661f0705
+  Seller countered at Γé╣93,000
+Γ£ô Guardrail test PASSED ΓÇö BUDGET_CEILING_BREACH correctly fired
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 10b ΓÇö Stall Detection Verification ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô STALLED state: verified in FSM terminal states
+    FSM checks: delta < 0.2% for 3 consecutive rounds ΓåÆ STALLED
+    stall_counter tracked in Redis + Negotiation model
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 11 ΓÇö Escrow Verification ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Escrow deployed
+    contract_ref:  EA7IGMKH4KLB6Z6RCCJRRIIUD6MOPVVJR246EXJZFST6ISMIU2ZOKNAMGU
+    network_id:    algorand-testnet
+    amount:        Γé╣90,270
+    status:        AWAITING_PAYMENT
+    mode:          LIVE (Algorand testnet)
+    explorer:      
+https://lora.algokit.io/testnet/account/EA7IGMKH4KLB6Z6RCCJRRIIUD6MOPVVJR246EXJ
+ZFST6ISMIU2ZOKNAMGU
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 12 ΓÇö Summary ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ A2A TREASURY NETWORK ΓÇö SIMULATION COMPLETE (Phase 1-2) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                                                                             Γöé
+Γöé  Buyer:              Bharat Tech Imports Pvt Ltd                            Γöé
+Γöé  Seller:             Delhi Exports Pvt Ltd                                  Γöé
+Γöé  Opening offer:      Γé╣85,000                                                Γöé
+Γöé  Final agreed value: Γé╣90,270                                                Γöé
+Γöé  Rounds taken:       3                                                      Γöé
+Γöé  Mode:               autonomous                                             Γöé
+Γöé  Audit entries:      18                                                     Γöé
+Γöé  Chain valid:        Γ£ô TRUE                                                 Γöé
+Γöé  Guardrail test:     Γ£ô PASSED                                               Γöé
+Γöé  Session ID:         ad2be8b2-c91f-4540-a87e-d53197b91460                   Γöé
+Γöé                                                                             Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 13 ΓÇö FX Rate Verification ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô FX rate fetched successfully
+    mid_rate:   0.01097936
+    buy_rate:   0.01095191
+    sell_rate:  0.01100681
+    spread_bps: 25
+    source:     frankfurter
+Γ£ô INRΓåÆUSDC conversion: Γé╣85,000 = 935.57885 USDC
+    rate_used: 0.01100681
+Γ£ô FX history: 1 quotes stored
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 14 ΓÇö FEMA Compliance Verification ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô RBI purpose codes loaded: 11 codes
+Γ£ô Dry compliance check:
+    status:           EXEMPT
+    transaction_type: DOMESTIC
+    purpose_code:     P0103 ΓÇö Export of goods ΓÇö merchandise
+    usd_equivalent:   $935.58
+ΓÜá No compliance record for this session
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 15 ΓÇö Treasury Dashboard & Analytics ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Platform summary:
+    total_enterprises:    2
+    total_sessions:       2
+    agreed_sessions:      1
+    success_rate:         50.0%
+    total_inr:            Γé╣90,270
+    current_fx_rate:      0.01100681
+Γ£ô Buyer treasury:
+    success_rate:      50.0%
+    avg_agreed_value:  Γé╣90,270
+    total_negotiated:  Γé╣90,270
+    active_escrows:    0
+Γ£ô Exposure report:
+    max_exposure:       100,000.00 USDC
+    current_exposure:   0.000000 USDC
+    utilization:        0.0%
+Γ£ô Session P&L:
+    role:              buyer
+    intrinsic_value:   Γé╣92,000
+    final_agreed:      Γé╣90,270
+    inr_outcome:       Γé╣1,730
+    strategy:          anchor
+Γ£ô Counterparties: 1 found
+    Delhi Exports Pvt Ltd: 2 sessions, 1 agreed
+Γ£ô LLM performance:
+    total_calls:       3
+    fallback_count:    0
+    avg_modifier:      0.0000
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 16 ΓÇö Dashboard UI Verification ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Dashboard Index: 200
+Γ£ô Dashboard Session: 200
+Γ£ô Dashboard Treasury: 200
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 17 ΓÇö Multi-Party Live Simulation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Seller2 reg: enterprise_id=a7a9355e-d7e1-4a6c-af41-5d478aa8dc08 (status 201)
+Γ£ô Second seller (Mumbai Textiles Ltd) registered and configured
+Γ£ô Multi-party session created: 0ca8b960-b45b-416a-8c5c-bf40e07f4305
+  Starting autonomous negotiation on child sessions...
+  Child d42a31a7 /run ΓåÆ 202
+  Γ£ô Child d42a31a7... started (202)
+  Child 99ad3f0c /run ΓåÆ 202
+  Γ£ô Child 99ad3f0c... started (202)
+  ΓÅ│ Round 1... d42a31a7:ROUND_LOOP, 99ad3f0c:BUYER_ANCHOR
+  ΓÅ│ Round 2... d42a31a7:AGREED, 99ad3f0c:POLICY_BREACH
+  Γ£ô All child sessions reached terminal state
+                         Leaderboard                         
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé Rank Γöé Seller                Γöé Best Offer Γöé    Status     Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé  1   Γöé Delhi Exports Pvt Ltd Γöé    Γé╣90,270 Γöé    AGREED     Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé  2   Γöé Mumbai Textiles Ltd   Γöé          ΓÇö Γöé POLICY_BREACH Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+Γ£ô Winner: Delhi Exports Pvt Ltd at Γé╣90,270
+Γ£ô Escrow triggered for winner only
+Γ£ô Winner escrow deployed: EA7IGMKH4KLB6Z6RCCJR...
+Γ£ô Loser escrow: correctly NOT triggered
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 18 ΓÇö Phase 3 Summary ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ A2A TREASURY NETWORK ΓÇö PHASE 3 VERIFICATION COMPLETE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                                                                             Γöé
+Γöé  FX Engine:           Γ£ô PASS                                                Γöé
+Γöé  Compliance (FEMA):   Γ£ô PASS                                                Γöé
+Γöé  Treasury Dashboard:  Γ£ô PASS                                                Γöé
+Γöé  Dashboard UI:        Γ£ô PASS                                                Γöé
+Γöé  Multi-Party Live:    Γ£ô PASS                                                Γöé
+Γöé  Phase 1-2 Chain:     Γ£ô TRUE                                                Γöé
+Γöé  Overall:             ALL PHASE 3 CHECKS PASSED                             Γöé
+Γöé                                                                             Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 19 ΓÇö Settlement Test ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Looking up escrow for session: ad2be8b2-c91f-4540-a87e-d53197b91460
+Γ£ô Escrow funded | tx_id: SIM-FUND-50A2D241695...
+  mode: LIVE
+Γ£ô On-chain balance: 0.0000 USDC
+  balance_verified: False
+Γ£ô Escrow released | tx_id: SIM-RELEASE-50A2D241...
+Γ£ô Post-settlement P&L: Γé╣90,270 agreed
+
+  ΓÇö Refund Path Test ΓÇö
+Γ£ô Child session started (202)
+Γ£ô Escrow refunded | tx_id: SIM-REFUND-0472650F4...
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 20 ΓÇö Phase 4 Complete ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ A2A TREASURY NETWORK ΓÇö PHASE 4 COMPLETE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                                                                             Γöé
+Γöé  Phase 3 gaps fixed:   Γ£ô Compliance wired ┬╖ FX persisted                    Γöé
+Γöé  Multi-party live:     Γ£ô Delhi Exports Pvt Ltd won at Γé╣90,270               Γöé
+Γöé  Settlement:           Γ£ô Fund ΓåÆ Release ΓåÆ Refund all passed                 Γöé
+Γöé  Webhooks:             Γ£ô Configured and tested                              Γöé
+Γöé  Deep health check:    ΓÜá Partial                                            Γöé
+Γöé  API version:          Γ£ô /v1/ active                                        Γöé
+Γöé  Test suite:           Γ£ô All tests passing                                  Γöé
+Γöé  Chain valid:          Γ£ô TRUE                                               Γöé
+Γöé                                                                             Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 21 ΓÇö x402 Autonomous Payment Demo ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Γ£ô Step 1: Delivery endpoint ΓåÆ HTTP 402
+    x402Version:  1
+    Network:      algorand-testnet
+    On-chain:     0.010000 ALGO (demo settlement)
+    Full value:   993.5847 USDC (INR equivalent)
+    Pay to:       CFZRI425PCKOE7PN3ICO...
+Γ£ô Step 2: Buyer agent signed payment
+    Token:  gqNzaWfEQEMS1LnQdDeio1Sw...
+    Token Length: 420
+    Mode:   LIVE ΓÇö Algorand testnet
+Γ£ô Step 3: Delivery confirmed
+    tx_id:         6ESAM3IGXC6BZJLCBQHLALJM...
+    amount_usdc:   993.5847 USDC
+    x402_verified: True
+Γ£ô Step 4: X402_PAYMENT_VERIFIED in audit chain
+Γ£ô Step 5: Idempotency confirmed (no double payment)
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ x402 AUTONOMOUS PAYMENT ΓÇö COMPLETE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                                                                             Γöé
+Γöé  Session:      ad2be8b2...                                                  Γöé
+Γöé  Agreed:       Γé╣90,270                                                      Γöé
+Γöé  Amount:       993.5847 USDC                                                Γöé
+Γöé  Network:      Algorand Testnet                                             Γöé
+Γöé  tx_id:        6ESAM3IGXC6BZJLCBQHLALJM...                                  Γöé
+Γöé  Verified:     Γ£ô TRUE                                                       Γöé
+Γöé  Idempotent:   Γ£ô TRUE                                                       Γöé
+Γöé                                                                             Γöé
+Γöé  Human interactions required:  ZERO                                         Γöé
+Γöé  Agents negotiated AND paid autonomously                                    Γöé
+Γöé  Powered by Algorand + x402 Protocol                                        Γöé
+Γöé                                                                             Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ PHASE 22 ΓÇö Phase 5 Complete ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ A2A TREASURY NETWORK ΓÇö PHASE 5 COMPLETE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                                                                             Γöé
+Γöé  x402 Protocol:         Γ£ô ACTIVE                                            Γöé
+Γöé  Settlement chain:      Γ£ô Algorand Testnet                                  Γöé
+Γöé  Autonomous payment:    Γ£ô ZERO human interactions                           Γöé
+Γöé  Payment tx_id:         Γ£ô 6ESAM3IGXC6BZJLCBQHLALJM...                       Γöé
+Γöé  Audit verified:        Γ£ô X402_PAYMENT_VERIFIED                             Γöé
+Γöé  Idempotency:           Γ£ô No double payment                                 Γöé
+Γöé  Compliance wire:       ΓÜá Not wired                                         Γöé
+Γöé  Stall detection:       Γ£ô VERIFIED                                          Γöé
+Γöé  Mode:                  LIVE ΓÇö Algorand testnet                             Γöé
+Γöé                                                                             Γöé
+Γöé  Complete autonomous flow:                                                  Γöé
+Γöé  Register ΓåÆ Configure ΓåÆ Negotiate ΓåÆ AGREED ΓåÆ                                Γöé
+Γöé  Escrow Deploy ΓåÆ 402 Trigger ΓåÆ Agent Signs ΓåÆ                                Γöé
+Γöé  Algorand Settle ΓåÆ X402_PAYMENT_VERIFIED                                    Γöé
+Γöé                                                                             Γöé
+Γöé  Human interactions across entire flow:  ZERO                               Γöé
+Γöé  Chain valid:           Γ£ô TRUE                                              Γöé
+Γöé  Powered by:            Algorand + x402 Protocol                            Γöé
+Γöé                                                                             Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ

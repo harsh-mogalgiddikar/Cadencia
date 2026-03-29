@@ -1,0 +1,281 @@
+{% extends "ui_base.html" %}
+{% block title %}Configure Agent{% endblock %}
+
+{% block content %}
+<div class="fade-in" x-data="configurePage()">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl">🤖</span>
+            <h1 id="configure-heading" class="text-2xl font-bold text-white">Configure Your AI Trading Agent</h1>
+        </div>
+        <p class="text-gray-400">
+            <span class="font-medium text-white">{{ enterprise_name }}</span>
+            <span
+                class="ml-2 text-xs px-2 py-0.5 rounded-full uppercase font-semibold
+        {% if role == 'buyer' %}bg-buyer/20 text-buyer border border-buyer/30{% else %}bg-seller/20 text-seller border border-seller/30{% endif %}">
+                {{ role }}
+            </span>
+        </p>
+    </div>
+
+    <form id="configure-form" @submit.prevent="submitConfig()">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Economic Parameters -->
+            <div class="glass-card p-6">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-brand"></span>
+                    Economic Parameters
+                </h2>
+
+                {% if role == 'buyer' %}
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Reservation Price <span
+                                class="text-gray-600">(walk-away)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <input id="input-reservation" type="number" x-model.number="reservation" class="w-full pl-7"
+                                step="100" />
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Never go above this</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Target Price <span class="text-gray-600">(ideal
+                                outcome)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <input id="input-target" type="number" x-model.number="target" class="w-full pl-7"
+                                step="100" />
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Aim to close here</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Budget Ceiling <span class="text-gray-600">(hard
+                                limit)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <input id="input-ceiling" type="number" x-model.number="ceiling" class="w-full pl-7"
+                                step="100" />
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Guardrail — agent auto-rejects any offer above this</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Reservation Price <span
+                                class="text-gray-600">(walk-away)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <input id="input-reservation" type="number" x-model.number="reservation" class="w-full pl-7"
+                                step="100" />
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Never go below this</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Target Price <span class="text-gray-600">(ideal
+                                outcome)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <input id="input-target" type="number" x-model.number="target" class="w-full pl-7"
+                                step="100" />
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Aim to close here</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Strategy Settings -->
+            <div class="glass-card p-6">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-algo"></span>
+                    Strategy Settings
+                </h2>
+
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Risk Factor</label>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500">Conservative</span>
+                            <input id="input-risk" type="range" x-model.number="risk" min="0" max="1" step="0.05"
+                                class="flex-1" />
+                            <span class="text-xs text-gray-500">Aggressive</span>
+                        </div>
+                        <p class="text-center text-sm text-brand-light mt-1" x-text="risk.toFixed(2)"></p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Opening Strategy</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" x-model="strategy" value="anchor_low" class="accent-brand" />
+                                <span class="text-sm text-gray-300">Anchor Low <span
+                                        class="text-gray-600">(recommended)</span></span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" x-model="strategy" value="midpoint" class="accent-brand" />
+                                <span class="text-sm text-gray-300">Midpoint</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" x-model="strategy" value="aggressive" class="accent-brand" />
+                                <span class="text-sm text-gray-300">Aggressive</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Concession Style</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" x-model="concession" value="decreasing" class="accent-brand" />
+                                <span class="text-sm text-gray-300">Decreasing <span
+                                        class="text-gray-600">(standard)</span></span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" x-model="concession" value="linear" class="accent-brand" />
+                                <span class="text-sm text-gray-300">Linear</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ZOPA Preview -->
+        <div class="glass-card p-6 mb-8">
+            <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-agreed"></span>
+                ZOPA Preview
+                <span class="text-xs text-gray-500 font-normal ml-1">Zone of Possible Agreement</span>
+            </h2>
+
+            <div class="relative h-10 bg-gray-800/50 rounded-lg overflow-hidden mb-3">
+                <!-- Scale labels -->
+                <div class="absolute inset-0 flex items-center justify-between px-3 text-xs text-gray-500 z-10">
+                    <span x-text="'₹' + Number(zopaMin).toLocaleString('en-IN')"></span>
+                    <span x-text="'₹' + Number(zopaMax).toLocaleString('en-IN')"></span>
+                </div>
+                <!-- ZOPA bar -->
+                <div class="absolute top-0 h-full bg-agreed/20 border-l-2 border-r-2 border-agreed/50 transition-all duration-300"
+                    :style="`left: ${zopaLeftPct}%; width: ${zopaWidthPct}%`">
+                </div>
+                <!-- Seller reservation marker -->
+                <div class="absolute top-0 h-full w-0.5 bg-seller/70 transition-all duration-300"
+                    :style="`left: ${sellerResPct}%`">
+                </div>
+                <!-- Buyer reservation marker -->
+                <div class="absolute top-0 h-full w-0.5 bg-buyer/70 transition-all duration-300"
+                    :style="`left: ${buyerResPct}%`">
+                </div>
+            </div>
+
+            <div class="flex justify-between text-xs">
+                <span class="text-seller">↑ seller res: ₹<span
+                        x-text="Number(sellerRes).toLocaleString('en-IN')"></span></span>
+                <span x-show="zopaOverlap > 0" class="text-agreed font-medium">
+                    Overlap: ₹<span x-text="Number(zopaOverlap).toLocaleString('en-IN')"></span> — deal possible ✓
+                </span>
+                <span x-show="zopaOverlap <= 0" class="text-red-400 font-medium">
+                    No overlap — deal unlikely ✗
+                </span>
+                <span class="text-buyer">↑ buyer res: ₹<span
+                        x-text="Number(buyerRes).toLocaleString('en-IN')"></span></span>
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div x-show="error" x-cloak
+            class="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <span x-text="error"></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-between">
+            <a href="/ui/login" class="text-sm text-gray-400 hover:text-white transition-colors" id="btn-back">←
+                Back</a>
+            <button id="btn-configure" type="submit" :disabled="loading"
+                class="btn-primary py-2.5 px-6 rounded-lg text-white font-medium text-sm">
+                <span x-show="!loading">Configure Agent →</span>
+                <span x-show="loading" class="flex items-center gap-2">
+                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Configuring...
+                </span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function configurePage() {
+        const role = '{{ role }}';
+        const isBuyer = role === 'buyer';
+
+        return {
+            // DANP parameters (matching simulate_negotiation.py)
+            reservation: isBuyer ? 103040 : 81780,
+            target: isBuyer ? 84640 : 91350,
+            ceiling: 96000,
+            risk: isBuyer ? 0.12 : 0.06,
+            strategy: 'anchor_low',
+            concession: 'decreasing',
+            loading: false,
+            error: '',
+
+            // Seller reservation for ZOPA preview (fixed for cross-party view)
+            get sellerRes() { return isBuyer ? 81780 : this.reservation; },
+            get buyerRes() { return isBuyer ? this.reservation : 103040; },
+            get zopaMin() { return Math.min(this.sellerRes, this.buyerRes) - 5000; },
+            get zopaMax() { return Math.max(this.sellerRes, this.buyerRes) + 5000; },
+            get zopaRange() { return this.zopaMax - this.zopaMin; },
+            get zopaOverlap() { return this.buyerRes - this.sellerRes; },
+            get sellerResPct() { return ((this.sellerRes - this.zopaMin) / this.zopaRange) * 100; },
+            get buyerResPct() { return ((this.buyerRes - this.zopaMin) / this.zopaRange) * 100; },
+            get zopaLeftPct() { return Math.max(0, this.sellerResPct); },
+            get zopaWidthPct() { return Math.max(0, this.buyerResPct - this.sellerResPct); },
+
+            async submitConfig() {
+                this.loading = true;
+                this.error = '';
+                try {
+                    const formData = new URLSearchParams();
+                    formData.append('reservation', this.reservation);
+                    formData.append('target', this.target);
+                    if (isBuyer) formData.append('ceiling', this.ceiling);
+                    formData.append('risk', this.risk);
+                    formData.append('strategy', this.strategy);
+                    formData.append('concession', this.concession);
+
+                    const resp = await fetch('/ui/configure', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData.toString(),
+                        redirect: 'follow',
+                    });
+                    if (resp.redirected) {
+                        window.location.href = resp.url;
+                    } else if (resp.ok) {
+                        const data = await resp.text();
+                        if (data.includes('/ui/negotiate/')) {
+                            window.location.href = data.trim();
+                        } else {
+                            window.location.href = '/ui/configure';
+                        }
+                    } else {
+                        this.error = 'Configuration failed. Check API connection.';
+                    }
+                } catch (e) {
+                    this.error = 'Connection error: ' + e.message;
+                } finally {
+                    this.loading = false;
+                }
+            },
+        };
+    }
+</script>
+{% endblock %}

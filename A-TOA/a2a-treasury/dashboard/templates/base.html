@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}A2A Treasury Network{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+        }
+        body { padding-top: 1rem; }
+        nav { margin-bottom: 2rem; }
+        .badge {
+            display: inline-block;
+            padding: 0.2em 0.6em;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-green { background: #22c55e22; color: #22c55e; }
+        .badge-yellow { background: #eab30822; color: #eab308; }
+        .badge-red { background: #ef444422; color: #ef4444; }
+        .badge-blue { background: #3b82f622; color: #3b82f6; }
+        .badge-gray { background: #6b728022; color: #6b7280; }
+        .stat-card {
+            background: var(--card-background-color);
+            border: 1px solid var(--muted-border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-card h3 { margin: 0; font-size: 1.8rem; }
+        .stat-card small { color: var(--muted-color); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        @media (max-width: 768px) {
+            .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+        .progress-bar {
+            background: var(--muted-border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            height: 8px;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <main class="container">
+        <nav>
+            <ul>
+                <li><strong>A2A Treasury Network</strong></li>
+            </ul>
+            <ul>
+                <li><a href="/dashboard/">Dashboard</a></li>
+                <li><a href="/docs">API Docs</a></li>
+                <li><a href="/health">Health</a></li>
+            </ul>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+        <footer style="margin-top: 3rem; text-align: center; color: var(--muted-color); font-size: 0.85rem;">
+            A2A Treasury Network v0.3.0 — Phase 3
+        </footer>
+    </main>
+</body>
+</html>

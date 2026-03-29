@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — A2A Treasury Network{% endblock %}
+
+{% block content %}
+<h1>Platform Overview</h1>
+
+<div class="grid-4" style="margin-bottom: 2rem;">
+    <div class="stat-card">
+        <h3>{{ platform.total_enterprises }}</h3>
+        <small>Total Enterprises</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ platform.active_enterprises }}</h3>
+        <small>Active (KYC Verified)</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ platform.total_sessions }}</h3>
+        <small>Total Sessions</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ platform.platform_success_rate }}%</h3>
+        <small>Success Rate</small>
+    </div>
+</div>
+
+<div class="grid-3" style="margin-bottom: 2rem;">
+    <div class="stat-card">
+        <h3>₹{{ "{:,.0f}".format(platform.total_inr_negotiated) }}</h3>
+        <small>Total INR Negotiated</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ platform.active_escrows }}</h3>
+        <small>Active Escrows</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ fx_rate }}</h3>
+        <small>FX Rate ({{ fx_source }})</small>
+    </div>
+</div>
+
+<h2>Recent Sessions</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Session ID</th>
+            <th>Buyer</th>
+            <th>Seller</th>
+            <th>Status</th>
+            <th>Agreed Value</th>
+            <th>Rounds</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in recent_sessions %}
+        <tr>
+            <td><a href="/dashboard/session/{{ s.session_id_full }}">{{ s.session_id }}</a></td>
+            <td>{{ s.buyer }}</td>
+            <td>{{ s.seller }}</td>
+            <td>
+                {% if s.status == 'AGREED' %}
+                <span class="badge badge-green">{{ s.status }}</span>
+                {% elif s.status in ['WALKAWAY', 'TIMEOUT', 'STALLED'] %}
+                <span class="badge badge-red">{{ s.status }}</span>
+                {% else %}
+                <span class="badge badge-blue">{{ s.status }}</span>
+                {% endif %}
+            </td>
+            <td>{{ s.agreed_value }}</td>
+            <td>{{ s.rounds }}</td>
+            <td>{{ s.created }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

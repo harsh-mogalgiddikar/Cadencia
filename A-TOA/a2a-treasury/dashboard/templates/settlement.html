@@ -1,0 +1,268 @@
+{% extends "ui_base.html" %}
+{% block title %}Settlement{% endblock %}
+
+{% block content %}
+<div class="fade-in" x-data="settlementPage()" x-init="init()">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <div class="text-3xl mb-2">✅</div>
+        <h1 id="settlement-heading" class="text-2xl font-bold text-agreed mb-1">Trade Settled — Zero Human Input</h1>
+        <p class="text-gray-500 text-sm">Session: <span class="font-mono text-gray-400">{{ session_id_short }}</span>
+        </p>
+    </div>
+
+    <!-- Deal Summary -->
+    <div class="glass-card p-6 mb-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-agreed"></span>
+            Deal Summary
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+            <div>
+                <p class="text-gray-500">Buyer</p>
+                <p class="text-white font-medium">{{ buyer_name }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Seller</p>
+                <p class="text-white font-medium">{{ seller_name }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Agreed Price</p>
+                <p class="text-agreed font-semibold text-lg">₹{{ agreed_value }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">USDC Equivalent</p>
+                <p class="text-white font-medium">{{ usdc_amount }} USDC</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Rounds</p>
+                <p class="text-white font-medium">{{ rounds }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Status</p>
+                <p class="text-agreed font-medium">{{ session_status }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Algorand Escrow -->
+    <div class="glass-card p-6 mb-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-algo"></span>
+            Algorand Escrow
+        </h2>
+        {% if escrow %}
+        <div class="space-y-3 text-sm">
+            <div class="flex items-start gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Address:</span>
+                <span class="text-gray-300 font-mono text-xs break-all">{{ escrow.contract_ref }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Network:</span>
+                <span class="text-gray-300">{{ escrow.network_id }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Amount:</span>
+                <span class="text-gray-300">₹{{ agreed_value }} ({{ usdc_amount }} USDC)</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Status:</span>
+                <span class="text-algo font-medium flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-algo pulse-dot"></span>
+                    {{ escrow.status }}
+                </span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Mode:</span>
+                <span class="text-gray-300">{{ escrow.mode }}</span>
+            </div>
+            {% if escrow.explorer_url %}
+            <a href="{{ escrow.explorer_url }}" target="_blank" rel="noopener"
+                class="inline-flex items-center gap-1 text-algo hover:text-algo/80 transition-colors mt-2"
+                id="link-explorer-escrow">
+                View on Lora Explorer ↗
+            </a>
+            {% endif %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-sm">No escrow data available</p>
+        {% endif %}
+    </div>
+
+    <!-- x402 Payment -->
+    <div class="glass-card p-6 mb-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand"></span>
+            x402 Payment
+        </h2>
+
+        {% if delivery %}
+        <div class="space-y-3 text-sm">
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Protocol:</span>
+                <span class="text-gray-300">HTTP 402 → Sign → 200</span>
+            </div>
+            <div class="flex items-start gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">tx_id:</span>
+                <span class="text-gray-300 font-mono text-xs break-all">{{ delivery.tx_id }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Amount:</span>
+                <span class="text-gray-300">{{ delivery.amount_usdc }} USDC</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Network:</span>
+                <span class="text-gray-300">{{ delivery.network }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Verified:</span>
+                <span class="text-agreed font-medium">✓ X402_PAYMENT_VERIFIED</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 w-24 flex-shrink-0">Idempotent:</span>
+                <span class="text-agreed font-medium">✓ No double payment</span>
+            </div>
+            {% if delivery.explorer_url %}
+            <a href="{{ delivery.explorer_url }}" target="_blank" rel="noopener"
+                class="inline-flex items-center gap-1 text-brand-light hover:text-brand transition-colors mt-2"
+                id="link-explorer-tx">
+                Verify on Algorand ↗
+            </a>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-gray-500 text-sm mb-4">x402 payment not yet triggered</p>
+            <button id="btn-trigger-x402" @click="triggerPayment()" :disabled="paymentLoading"
+                class="btn-primary py-2 px-5 rounded-lg text-white text-sm font-medium">
+                <span x-show="!paymentLoading">Trigger x402 Payment</span>
+                <span x-show="paymentLoading" class="flex items-center gap-2">
+                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Processing...
+                </span>
+            </button>
+            <div x-show="paymentError" class="mt-3 text-red-400 text-xs" x-text="paymentError"></div>
+            <!-- x402 result after trigger -->
+            <div x-show="paymentResult" x-cloak class="mt-4 glass-card p-4 text-left text-sm space-y-2 fade-in">
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-500 w-24 flex-shrink-0">tx_id:</span>
+                    <span class="text-gray-300 font-mono text-xs break-all" x-text="paymentResult?.tx_id"></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-500 w-24 flex-shrink-0">Verified:</span>
+                    <span class="text-agreed font-medium">✓ X402_PAYMENT_VERIFIED</span>
+                </div>
+                <a x-show="paymentResult?.explorer_url" :href="paymentResult?.explorer_url" target="_blank"
+                    class="inline-flex items-center gap-1 text-brand-light hover:text-brand transition-colors mt-1 text-xs">
+                    Verify on Algorand ↗
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Audit Chain -->
+    <div class="glass-card p-6 mb-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-light"></span>
+            Audit Chain
+        </h2>
+        {% if audit_chain %}
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-sm text-gray-400">SHA-256 hash chain:</span>
+            {% if audit_chain.valid %}
+            <span class="text-agreed font-medium text-sm">✓ VALID</span>
+            {% else %}
+            <span class="text-red-400 font-medium text-sm">✗ BROKEN</span>
+            {% endif %}
+            <span class="text-gray-600 text-xs ml-2">{{ audit_chain.total_entries }} entries</span>
+        </div>
+        <div class="space-y-1.5 max-h-48 overflow-y-auto text-xs font-mono pr-2">
+            {% for entry in audit_entries %}
+            <div class="flex items-center gap-2">
+                <span class="text-gray-600 w-32 flex-shrink-0">{{ entry.action }}</span>
+                <span class="text-gray-500">{{ entry.hash }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <a href="/ui/settlement/{{ session_id }}/transcript" download
+            class="inline-flex items-center gap-1 text-brand-light hover:text-brand transition-colors mt-4 text-sm"
+            id="link-download-transcript">
+            📥 Download Full Transcript
+        </a>
+    </div>
+
+    <!-- FX Summary -->
+    {% if fx_rate %}
+    <div class="glass-card p-6 mb-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+            FX Summary
+        </h2>
+        <div class="grid grid-cols-3 gap-4 text-sm">
+            <div>
+                <p class="text-gray-500">INR→USDC rate</p>
+                <p class="text-white font-mono">{{ fx_rate.rate }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Spread</p>
+                <p class="text-white">{{ fx_rate.spread_bps }} bps</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Source</p>
+                <p class="text-white">{{ fx_rate.source }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="flex items-center justify-between">
+        <a href="/ui/login" id="btn-new-trade" class="text-sm text-gray-400 hover:text-white transition-colors">← New
+            Trade</a>
+        {% if enterprise_id %}
+        <a href="/dashboard/treasury/{{ enterprise_id }}" id="btn-treasury"
+            class="btn-primary py-2 px-5 rounded-lg text-white text-sm font-medium">Treasury →</a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function settlementPage() {
+        return {
+            paymentLoading: false,
+            paymentError: '',
+            paymentResult: null,
+
+            init() { },
+
+            async triggerPayment() {
+                this.paymentLoading = true;
+                this.paymentError = '';
+                try {
+                    const resp = await fetch('/ui/settlement/{{ session_id }}/pay', { method: 'POST' });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        this.paymentResult = data;
+                        // Reload to show full delivery section
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        const errData = await resp.json().catch(() => ({}));
+                        this.paymentError = errData.error || 'Payment failed';
+                    }
+                } catch (e) {
+                    this.paymentError = 'Connection error: ' + e.message;
+                } finally {
+                    this.paymentLoading = false;
+                }
+            },
+        };
+    }
+</script>
+{% endblock %}

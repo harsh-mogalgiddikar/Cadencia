@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Treasury — {{ summary.enterprise_name }}{% endblock %}
+
+{% block content %}
+<h1>Treasury — {{ summary.enterprise_name }}</h1>
+
+<article>
+    <header>
+        <div class="grid-3">
+            <div><small>Role</small><br>{{ summary.agent_role or '—' }}</div>
+            <div><small>Wallet</small><br><code
+                    style="font-size: 0.75rem;">{{ (summary.wallet_address or 'N/A')[:20] }}...</code></div>
+            <div><small>Risk Tolerance</small><br>{{ summary.risk_tolerance or '—' }}</div>
+        </div>
+    </header>
+</article>
+
+<div class="grid-4" style="margin-bottom: 2rem;">
+    <div class="stat-card">
+        <h3>{{ summary.success_rate }}%</h3>
+        <small>Success Rate</small>
+    </div>
+    <div class="stat-card">
+        <h3>₹{{ "{:,.0f}".format(summary.avg_agreed_value) }}</h3>
+        <small>Avg Agreed Value</small>
+    </div>
+    <div class="stat-card">
+        <h3>₹{{ "{:,.0f}".format(summary.total_inr_negotiated) }}</h3>
+        <small>Total Negotiated</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ summary.active_escrows }}</h3>
+        <small>Active Escrows</small>
+    </div>
+</div>
+
+<div class="grid-3" style="margin-bottom: 2rem;">
+    <div class="stat-card">
+        <h3>{{ summary.total_sessions }}</h3>
+        <small>Total Sessions</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ summary.agreed_sessions }}</h3>
+        <small>Agreed</small>
+    </div>
+    <div class="stat-card">
+        <h3>{{ summary.avg_rounds_to_agreement }}</h3>
+        <small>Avg Rounds</small>
+    </div>
+</div>
+
+{% if exposure %}
+<h2>Exposure</h2>
+<article>
+    <p>
+        <strong>{{ "{:,.2f}".format(exposure.current_active_exposure) }} USDC</strong>
+        of {{ "{:,.2f}".format(exposure.max_exposure_configured) }} USDC max
+        ({{ exposure.exposure_utilization_pct }}%)
+    </p>
+    <div class="progress-bar">
+        <div class="fill" style="width: {{ [exposure.exposure_utilization_pct, 100] | min }}%;"></div>
+    </div>
+    {% if exposure.escrow_breakdown %}
+    <table style="margin-top: 1rem;">
+        <thead>
+            <tr>
+                <th>Session</th>
+                <th>Contract</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in exposure.escrow_breakdown %}
+            <tr>
+                <td>{{ e.session_id[:8] }}...</td>
+                <td><code style="font-size: 0.75rem;">{{ e.contract_ref[:16] }}...</code></td>
+                <td>{{ "{:,.6f}".format(e.amount_usdc) }} USDC</td>
+                <td><span class="badge badge-green">{{ e.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</article>
+{% endif %}
+
+{% if counterparties %}
+<h2>Counterparties</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Counterparty</th>
+            <th>Sessions</th>
+            <th>Agreed</th>
+            <th>Avg Value</th>
+            <th>Avg Rounds</th>
+            <th>Last Session</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cp in counterparties %}
+        <tr>
+            <td>{{ cp.counterparty_name }}</td>
+            <td>{{ cp.sessions_count }}</td>
+            <td>{{ cp.agreed_count }}</td>
+            <td>₹{{ "{:,.0f}".format(cp.avg_agreed_value) }}</td>
+            <td>{{ cp.avg_rounds }}</td>
+            <td>{{ cp.last_session_at[:10] if cp.last_session_at else '—' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

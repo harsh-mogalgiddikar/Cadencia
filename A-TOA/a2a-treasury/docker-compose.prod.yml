@@ -1,0 +1,24 @@
+# Phase 4: Production override — gunicorn, no hot-reload
+version: "3.9"
+services:
+  api:
+    build:
+      target: production
+    command: >
+      gunicorn api.main:app
+      --worker-class uvicorn.workers.UvicornWorker
+      --workers 4
+      --bind 0.0.0.0:8000
+      --timeout 120
+      --keepalive 5
+      --access-logfile -
+      --error-logfile -
+    environment:
+      - ENVIRONMENT=production
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

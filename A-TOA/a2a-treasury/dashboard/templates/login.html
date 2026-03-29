@@ -1,0 +1,180 @@
+{% extends "ui_base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="fade-in" x-data="loginPage()">
+    <!-- Hero -->
+    <div class="text-center mb-12">
+        <div
+            class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand/20 border border-brand/30 mb-6 brand-glow">
+            <span class="text-2xl font-bold text-brand-light">A2</span>
+        </div>
+        <h1 id="login-heading" class="text-3xl font-bold text-white mb-3">A2A Treasury Network</h1>
+        <p class="text-gray-400 text-lg max-w-md mx-auto">Watch AI agents negotiate &amp; settle trades autonomously on
+            Algorand</p>
+    </div>
+
+    <!-- Quick Login Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-10">
+        <!-- Buyer Card -->
+        <div class="glass-card p-6 text-center">
+            <div
+                class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-buyer/20 border border-buyer/30 mb-4">
+                <span class="text-xl">🔵</span>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-1">BUYER</h3>
+            <p class="text-sm text-gray-400 mb-4">Bharat Tech Imports Pvt Ltd</p>
+            <p class="text-xs text-gray-500 mb-4">Wants to purchase at the lowest price</p>
+            <button id="btn-enter-buyer" @click="quickLogin('buyer')" :disabled="loading"
+                class="btn-buyer w-full py-2.5 px-4 rounded-lg text-white font-medium text-sm">
+                <span x-show="!loading || role !== 'buyer'">Enter as Buyer →</span>
+                <span x-show="loading && role === 'buyer'" class="flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Logging in...
+                </span>
+            </button>
+        </div>
+
+        <!-- Seller Card -->
+        <div class="glass-card p-6 text-center">
+            <div
+                class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-seller/20 border border-seller/30 mb-4">
+                <span class="text-xl">🔴</span>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-1">SELLER</h3>
+            <p class="text-sm text-gray-400 mb-4">Delhi Exports Pvt Ltd</p>
+            <p class="text-xs text-gray-500 mb-4">Wants to sell at the highest price</p>
+            <button id="btn-enter-seller" @click="quickLogin('seller')" :disabled="loading"
+                class="btn-seller w-full py-2.5 px-4 rounded-lg text-white font-medium text-sm">
+                <span x-show="!loading || role !== 'seller'">Enter as Seller →</span>
+                <span x-show="loading && role === 'seller'" class="flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Logging in...
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="flex items-center gap-4 max-w-md mx-auto mb-8">
+        <div class="flex-1 h-px bg-gray-700"></div>
+        <span class="text-xs text-gray-500 uppercase tracking-wider">or enter credentials manually</span>
+        <div class="flex-1 h-px bg-gray-700"></div>
+    </div>
+
+    <!-- Manual Login Form -->
+    <form id="login-form" class="max-w-md mx-auto glass-card p-6" @submit.prevent="manualLogin()">
+        <div class="mb-4">
+            <label class="block text-sm text-gray-400 mb-1.5">Email</label>
+            <input id="login-email" type="email" x-model="email" class="w-full" placeholder="user@enterprise.com"
+                required />
+        </div>
+        <div class="mb-6">
+            <label class="block text-sm text-gray-400 mb-1.5">Password</label>
+            <input id="login-password" type="password" x-model="password" class="w-full" placeholder="••••••••"
+                required />
+        </div>
+        <button id="btn-login" type="submit" :disabled="loading"
+            class="btn-primary w-full py-2.5 px-4 rounded-lg text-white font-medium text-sm">
+            <span x-show="!loading">Login</span>
+            <span x-show="loading" class="flex items-center justify-center gap-2">
+                <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                        fill="none" />
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Authenticating...
+            </span>
+        </button>
+
+        <!-- Error Message -->
+        <div x-show="error" x-cloak
+            class="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <span x-text="error"></span>
+        </div>
+    </form>
+
+    <!-- Tagline -->
+    <p class="text-center text-gray-600 text-xs mt-8 italic">"No humans required after this point"</p>
+</div>
+
+<script>
+    function loginPage() {
+        return {
+            email: '',
+            password: '',
+            loading: false,
+            error: '',
+            role: '',
+
+            async quickLogin(role) {
+                this.role = role;
+                this.loading = true;
+                this.error = '';
+                try {
+                    const formData = new URLSearchParams();
+                    formData.append('email', role === 'buyer' ? '{{ demo_buyer_email }}' : '{{ demo_seller_email }}');
+                    formData.append('password', role === 'buyer' ? '{{ demo_buyer_password }}' : '{{ demo_seller_password }}');
+                    formData.append('quick_role', role);
+
+                    const resp = await fetch('/ui/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData.toString(),
+                        redirect: 'follow',
+                    });
+                    if (resp.redirected) {
+                        window.location.href = resp.url;
+                    } else if (resp.ok) {
+                        window.location.href = '/ui/configure';
+                    } else {
+                        const text = await resp.text();
+                        this.error = 'Login failed. Are demo accounts seeded?';
+                    }
+                } catch (e) {
+                    this.error = 'Connection error: ' + e.message;
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            async manualLogin() {
+                this.role = 'manual';
+                this.loading = true;
+                this.error = '';
+                try {
+                    const formData = new URLSearchParams();
+                    formData.append('email', this.email);
+                    formData.append('password', this.password);
+
+                    const resp = await fetch('/ui/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData.toString(),
+                        redirect: 'follow',
+                    });
+                    if (resp.redirected) {
+                        window.location.href = resp.url;
+                    } else if (resp.ok) {
+                        window.location.href = '/ui/configure';
+                    } else {
+                        this.error = 'Invalid credentials';
+                    }
+                } catch (e) {
+                    this.error = 'Connection error: ' + e.message;
+                } finally {
+                    this.loading = false;
+                }
+            },
+        };
+    }
+</script>
+{% endblock %}

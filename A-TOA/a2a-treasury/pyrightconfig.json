@@ -1,0 +1,41 @@
+{
+  "root": ".",
+  "pythonVersion": "3.12",
+  "pythonPlatform": "Windows",
+  "pythonPath": "C:/Users/Shreyas/AppData/Local/Programs/Python/Python312/python.exe",
+  "extraPaths": [
+    ".",
+    "C:/Users/Shreyas/AppData/Local/Programs/Python/Python312/Lib/site-packages"
+  ],
+  "typeCheckingMode": "basic",
+  "reportMissingImports": "warning",
+  "reportMissingModuleSource": "none",
+  "reportOptionalMemberAccess": "none",
+  "reportOptionalSubscript": "none",
+  "reportOptionalCall": "none",
+  "reportOptionalIterable": "none",
+  "reportGeneralTypeIssues": "none",
+  "reportCallIssue": "none",
+  "reportArgumentType": "none",
+  "reportReturnType": "none",
+  "reportIndexIssue": "none",
+  "reportOperatorIssue": "none",
+  "include": [
+    "a2a_protocol",
+    "agents",
+    "api",
+    "blockchain",
+    "compliance",
+    "core",
+    "dashboard",
+    "db",
+    "framework",
+    "treasury",
+    "tests"
+  ],
+  "exclude": [
+    "__pycache__",
+    ".pytest_cache",
+    "**/__pycache__"
+  ]
+}

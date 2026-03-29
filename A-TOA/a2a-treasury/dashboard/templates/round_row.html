@@ -1,0 +1,26 @@
+<div :class="offer.agent_role === 'buyer' ? 'offer-row-buyer' : 'offer-row-seller'"
+    class="flex items-start gap-3 p-3 rounded-lg bg-gray-800/30">
+    <div :class="offer.agent_role === 'buyer' ? 'bg-buyer/20 text-buyer' : 'bg-seller/20 text-seller'"
+        class="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0">
+        <span x-text="offer.agent_role === 'buyer' ? '🔵' : '🔴'"></span>
+    </div>
+    <div class="flex-1">
+        <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs text-gray-500">
+                Round <span x-text="offer.round"></span> ·
+                <span x-text="offer.agent_role" class="capitalize"></span>
+            </span>
+            <span class="text-xs px-1.5 py-0.5 rounded-full bg-gray-700 text-gray-300"
+                x-text="offer.action.toUpperCase()"></span>
+            <span x-show="offer.strategy_tag" class="text-xs px-1.5 py-0.5 rounded-full bg-brand/10 text-brand-light"
+                x-text="offer.strategy_tag"></span>
+        </div>
+        <div class="flex items-center gap-3 mt-1">
+            <span class="text-lg font-semibold text-white"
+                x-text="offer.value ? '₹' + Number(offer.value).toLocaleString('en-IN') : '—'"></span>
+            <span x-show="offer.confidence" class="text-xs text-gray-500">
+                confidence: <span x-text="Number(offer.confidence).toFixed(2)"></span>
+            </span>
+        </div>
+    </div>
+</div>

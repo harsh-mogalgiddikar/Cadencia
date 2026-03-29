@@ -1,0 +1,338 @@
+{% extends "ui_base.html" %}
+{% block title %}Negotiation Arena{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in" x-data="negotiationArena()" x-init="init()">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <div class="flex items-center gap-3 mb-1">
+                <span class="text-xl">⚡</span>
+                <h1 id="negotiate-heading" class="text-xl font-bold text-white">Autonomous Negotiation</h1>
+                <span x-show="status === 'RUNNING'" class="flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-algo pulse-dot"></span>
+                    <span class="text-xs text-algo">LIVE</span>
+                </span>
+            </div>
+            <p class="text-gray-500 text-sm">
+                Session: <span class="text-gray-400 font-mono">{{ session_id_short }}</span>
+                · Round: <span class="text-white font-medium" x-text="currentRound"></span>/<span
+                    x-text="maxRounds"></span>
+            </p>
+        </div>
+        <div x-show="elapsed" class="text-xs text-gray-500">
+            Elapsed: <span x-text="elapsed" class="text-gray-400"></span>
+        </div>
+    </div>
+
+    <!-- Participants -->
+    <div class="glass-card p-4 mb-6">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-buyer/20 flex items-center justify-center text-sm">🔵</div>
+                <div>
+                    <p class="text-sm font-medium text-white">{{ buyer_name }}</p>
+                    <p class="text-xs text-gray-500">Target: ₹{{ buyer_target }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 justify-end">
+                <div class="text-right">
+                    <p class="text-sm font-medium text-white">{{ seller_name }}</p>
+                    <p class="text-xs text-gray-500">Target: ₹{{ seller_target }}</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-seller/20 flex items-center justify-center text-sm">🔴</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGREED Banner -->
+    <div x-show="status === 'AGREED'" x-cloak
+        class="glass-card p-6 mb-6 border-agreed/30 bg-agreed/5 text-center fade-in">
+        <div class="text-3xl mb-2">✅</div>
+        <h2 class="text-xl font-bold text-agreed mb-3">DEAL AGREED</h2>
+        <div class="grid grid-cols-3 gap-4 text-sm max-w-md mx-auto">
+            <div>
+                <p class="text-gray-500">Final Price</p>
+                <p class="text-white font-semibold" x-text="'₹' + Number(agreedValue).toLocaleString('en-IN')"></p>
+            </div>
+            <div>
+                <p class="text-gray-500">Rounds</p>
+                <p class="text-white font-semibold" x-text="currentRound"></p>
+            </div>
+            <div>
+                <p class="text-gray-500">Time</p>
+                <p class="text-white font-semibold" x-text="elapsed || '~0s'"></p>
+            </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-3">Human input: <span class="text-algo font-bold">ZERO</span></p>
+        <a :href="'/ui/settlement/' + sessionId" id="btn-view-settlement"
+            class="inline-block mt-4 btn-primary py-2 px-6 rounded-lg text-white text-sm font-medium">
+            View Settlement →
+        </a>
+    </div>
+
+    <!-- Terminal (non-AGREED) Banner -->
+    <div x-show="isTerminal && status !== 'AGREED'" x-cloak
+        class="glass-card p-6 mb-6 border-red-500/30 bg-red-500/5 text-center fade-in">
+        <div class="text-3xl mb-2">⚠️</div>
+        <h2 class="text-xl font-bold text-red-400 mb-2" x-text="status"></h2>
+        <p class="text-sm text-gray-400" x-text="terminalReason"></p>
+        <a href="/ui/login" class="inline-block mt-4 text-sm text-gray-400 hover:text-white transition-colors">← Start
+            New Trade</a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Live Offer Feed (2/3 width) -->
+        <div class="lg:col-span-2">
+            <div class="glass-card p-5">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Live Offer Feed</h2>
+                <div id="offer-feed" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                    <template x-for="(offer, idx) in offers" :key="idx">
+                        <div :class="offer.agent_role === 'buyer' ? 'offer-row-buyer' : 'offer-row-seller'"
+                            class="flex items-start gap-3 p-3 rounded-lg bg-gray-800/30">
+                            <div :class="offer.agent_role === 'buyer' ? 'bg-buyer/20 text-buyer' : 'bg-seller/20 text-seller'"
+                                class="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5"
+                                x-text="offer.agent_role === 'buyer' ? '🔵' : '🔴'">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-xs text-gray-500">
+                                        Round <span x-text="offer.round"></span> ·
+                                        <span x-text="offer.agent_role" class="capitalize"></span>
+                                    </span>
+                                    <span class="text-xs px-1.5 py-0.5 rounded-full bg-gray-700 text-gray-300"
+                                        x-text="offer.action.toUpperCase()"></span>
+                                    <span x-show="offer.strategy_tag"
+                                        class="text-xs px-1.5 py-0.5 rounded-full bg-brand/10 text-brand-light"
+                                        x-text="offer.strategy_tag"></span>
+                                </div>
+                                <div class="flex items-center gap-3 mt-1">
+                                    <span class="text-lg font-semibold text-white"
+                                        x-text="offer.value ? '₹' + Number(offer.value).toLocaleString('en-IN') : '—'">
+                                    </span>
+                                    <span x-show="offer.confidence" class="text-xs text-gray-500">
+                                        confidence: <span
+                                            x-text="offer.confidence ? Number(offer.confidence).toFixed(2) : ''"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div :class="offer.agent_role === 'buyer' ? 'text-buyer/50' : 'text-seller/50'"
+                                class="text-xs mt-1" x-text="offer.agent_role === 'buyer' ? '←' : '→'">
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Waiting spinner -->
+                    <div x-show="!isTerminal && offers.length > 0" class="flex items-center gap-3 p-3 text-gray-500">
+                        <svg class="animate-spin h-4 w-4 text-algo" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                                fill="none" />
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        <span class="text-sm">LLM Advisory running...</span>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div x-show="offers.length === 0 && !isTerminal" class="text-center py-8 text-gray-600">
+                        <p class="text-sm">Starting autonomous negotiation...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+            <!-- Convergence Chart -->
+            <div class="glass-card p-5">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Convergence</h2>
+                <div class="h-48">
+                    <canvas id="convergenceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Audit Stream -->
+            <div class="glass-card p-5">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Audit Stream</h2>
+                <div id="audit-stream" class="space-y-1.5 max-h-48 overflow-y-auto text-xs font-mono pr-2">
+                    <template x-for="(entry, idx) in auditEntries" :key="idx">
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-600" x-text="entry.time"></span>
+                            <span class="text-gray-300" x-text="entry.action"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-algo flex-shrink-0"
+                                x-show="entry.action.includes('SUBMITTED') || entry.action.includes('VERIFIED')"></span>
+                        </div>
+                    </template>
+                    <div x-show="auditEntries.length === 0" class="text-gray-600 py-2">Waiting for events...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var _SESSION_ID = '{{ session_id }}';
+    var _MAX_ROUNDS = Number('{{ max_rounds }}');
+
+    function negotiationArena() {
+        var sessionId = _SESSION_ID;
+        var chart = null;
+        var startTime = Date.now();
+
+        return {
+            sessionId: sessionId,
+            status: 'STARTING',
+            currentRound: 0,
+            maxRounds: _MAX_ROUNDS,
+            isTerminal: false,
+            agreedValue: null,
+            terminalReason: '',
+            offers: [],
+            auditEntries: [],
+            elapsed: '',
+            lastOfferCount: 0,
+
+            async init() {
+                this.initChart();
+                try {
+                    await fetch('/ui/negotiate/' + sessionId + '/start', { method: 'POST' });
+                } catch (e) {
+                    console.log('Start request sent');
+                }
+                this.poll();
+                var self = this;
+                setInterval(function () {
+                    var secs = Math.floor((Date.now() - startTime) / 1000);
+                    self.elapsed = secs < 60 ? ('~' + secs + 's') : ('~' + Math.floor(secs / 60) + 'm ' + (secs % 60) + 's');
+                }, 1000);
+            },
+
+            initChart() {
+                var ctx = document.getElementById('convergenceChart').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [
+                            {
+                                label: 'Buyer',
+                                data: [],
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59,130,246,0.1)',
+                                tension: 0.3,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#3b82f6'
+                            },
+                            {
+                                label: 'Seller',
+                                data: [],
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239,68,68,0.1)',
+                                tension: 0.3,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#ef4444'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 300 },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: { color: '#9ca3af', font: { size: 10 } }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#6b7280', font: { size: 10 } }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: {
+                                    color: '#6b7280',
+                                    font: { size: 10 },
+                                    callback: function (v) { return '\u20b9' + (v / 1000).toFixed(0) + 'k'; }
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+
+            updateChart() {
+                var buyerByRound = {};
+                var sellerByRound = {};
+                var roundSet = {};
+                for (var i = 0; i < this.offers.length; i++) {
+                    var o = this.offers[i];
+                    if (!o.value) continue;
+                    roundSet[o.round] = true;
+                    if (o.agent_role === 'buyer') buyerByRound[o.round] = o.value;
+                    if (o.agent_role === 'seller') sellerByRound[o.round] = o.value;
+                }
+                var allRounds = Object.keys(roundSet).map(Number).sort(function (a, b) { return a - b; });
+                chart.data.labels = allRounds.map(function (r) { return 'R' + r; });
+                chart.data.datasets[0].data = allRounds.map(function (r) { return buyerByRound[r] || null; });
+                chart.data.datasets[1].data = allRounds.map(function (r) { return sellerByRound[r] || null; });
+                chart.update();
+            },
+
+            async poll() {
+                if (this.isTerminal) return;
+                var self = this;
+                try {
+                    var statusResp = await fetch('/ui/negotiate/' + sessionId + '/status');
+                    if (statusResp.ok) {
+                        var statusData = await statusResp.json();
+                        this.status = statusData.status;
+                        this.currentRound = statusData.current_round || 0;
+                        this.isTerminal = statusData.is_terminal || false;
+                        this.agreedValue = statusData.final_agreed_value;
+                        if (this.isTerminal && this.status !== 'AGREED') {
+                            this.terminalReason = 'Negotiation ended with status: ' + this.status;
+                        }
+                    }
+                    var offersResp = await fetch('/ui/negotiate/' + sessionId + '/offers');
+                    if (offersResp.ok) {
+                        var offersData = await offersResp.json();
+                        var newOffers = offersData.offers || [];
+                        if (newOffers.length > this.offers.length) {
+                            this.offers = newOffers;
+                            this.updateChart();
+                            this.$nextTick(function () {
+                                var feed = document.getElementById('offer-feed');
+                                if (feed) feed.scrollTop = feed.scrollHeight;
+                            });
+                        }
+                    }
+                    var auditResp = await fetch('/ui/negotiate/' + sessionId + '/audit');
+                    if (auditResp.ok) {
+                        var auditData = await auditResp.json();
+                        this.auditEntries = auditData.entries || [];
+                        this.$nextTick(function () {
+                            var stream = document.getElementById('audit-stream');
+                            if (stream) stream.scrollTop = stream.scrollHeight;
+                        });
+                    }
+                } catch (e) {
+                    console.error('Poll error:', e);
+                }
+                if (!this.isTerminal) {
+                    setTimeout(function () { self.poll(); }, 1500);
+                } else if (this.status === 'AGREED') {
+                    setTimeout(function () {
+                        window.location.href = '/ui/settlement/' + sessionId;
+                    }, 3000);
+                }
+            }
+        };
+    }
+</script>
+{% endblock %}
