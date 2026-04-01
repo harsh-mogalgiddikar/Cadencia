@@ -173,12 +173,16 @@ async def get_escrow_status(
     on_chain_balance_usdc = 0.0
     sdk_available = False
     try:
-        from blockchain.algo_client import AlgorandClient
+        from blockchain.sdk_client import get_algorand_client
         import os
-        client = AlgorandClient()
-        sdk_available = getattr(client, "sdk_available", False)
+        client = get_algorand_client()
+        sdk_available = True
         asset_id = int(os.getenv("ALGORAND_USDC_ASSET_ID", "10458941"))
-        on_chain_balance_usdc = await client.get_asset_balance(contract_ref, asset_id)
+        info = client.get_account_info(contract_ref)
+        for asset in info.get("assets", []):
+            if asset["asset-id"] == asset_id:
+                on_chain_balance_usdc = asset.get("amount", 0) / 1_000_000.0
+                break
     except Exception:
         pass
     balance_verified = abs(on_chain_balance_usdc - agreed_usdc) <= 0.01 if agreed_usdc else False

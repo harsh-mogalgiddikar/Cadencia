@@ -6,7 +6,6 @@ Layer: Verification Layer — Agentic Commerce Framework
 """
 from __future__ import annotations
 
-import hashlib
 import logging
 import os
 import uuid
@@ -32,7 +31,6 @@ class AnchorService:
 
         Modes:
         - ANCHOR_DISABLED:    returns immediately
-        - X402_SIMULATION_MODE=true:  deterministic SIM- tx_id
         - LIVE:               broadcasts real PaymentTxn
         """
         try:
@@ -41,44 +39,11 @@ class AnchorService:
             if not anchor_enabled:
                 return {"anchored": False, "reason": "ANCHOR_DISABLED"}
 
-            # Simulation mode check
-            simulation_mode = os.getenv("X402_SIMULATION_MODE", "true").lower() == "true"
-
             sid = uuid.UUID(session_id) if isinstance(session_id, str) else session_id
 
-            if simulation_mode:
-                # Deterministic fake tx_id
-                fake_tx_id = (
-                    f"SIM-ANCHOR-"
-                    f"{hashlib.sha256(merkle_root.encode()).hexdigest()[:16].upper()}"
-                )
-
-                # Store in DB
-                neg_result = await db.execute(
-                    select(Negotiation).where(Negotiation.session_id == sid),
-                )
-                neg = neg_result.scalar_one_or_none()
-                if neg:
-                    neg.anchor_tx_id = fake_tx_id
-                    await db.flush()
-
-                logger.info(
-                    "Anchor SIM for session %s: %s",
-                    str(session_id)[:8],
-                    fake_tx_id,
-                )
-                return {
-                    "anchored": True,
-                    "tx_id": fake_tx_id,
-                    "simulation": True,
-                }
-
             # ── LIVE MODE ──────────────────────────────────────────────
-            try:
-                from algosdk import mnemonic, transaction
-                from algosdk.v2client import algod
-            except ImportError:
-                return {"anchored": False, "reason": "ALGOSDK_NOT_AVAILABLE"}
+            from algosdk import mnemonic, transaction
+            from algosdk.v2client import algod
 
             buyer_address = os.getenv("BUYER_WALLET_ADDRESS", "")
             buyer_mnemonic_str = os.getenv("BUYER_WALLET_MNEMONIC", "")
@@ -95,12 +60,11 @@ class AnchorService:
 
             private_key = mnemonic.to_private_key(buyer_mnemonic_str)
 
-            # Always fetch fresh suggested params
             sp = algod_client.suggested_params()
             sp.flat_fee = True
             sp.fee = 1000  # 0.001 ALGO min fee
 
-            note_str = f"acf:anchor:v1:{session_id}:{merkle_root}"
+            note_str = f"cadencia:anchor:v1:{session_id}:{merkle_root}"
             note_bytes = note_str.encode()
 
             # Self-transfer (zero net cost beyond fee)
@@ -113,11 +77,9 @@ class AnchorService:
             )
             signed_txn = txn.sign(private_key)
 
-            # Submit signed transaction
-            import base64
             tx_id = algod_client.send_transaction(signed_txn)
 
-            # Wait for confirmation (synchronous algosdk call)
+            # Wait for confirmation
             try:
                 transaction.wait_for_confirmation(algod_client, tx_id, wait_rounds=10)
             except Exception as conf_err:

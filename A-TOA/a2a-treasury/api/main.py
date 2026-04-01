@@ -32,8 +32,8 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)-8s [%(name)s] %(message)s",
 )
 logger = logging.getLogger("a2a_treasury")
-APP_VERSION = "0.5.0"
-PHASE = "5"
+APP_VERSION = "1.0.0-rc1"
+PHASE = "cadencia-1"
 
 # ─── Redis singleton ────────────────────────────────────────────────────────
 redis_manager = RedisSessionManager(
@@ -45,7 +45,7 @@ redis_manager = RedisSessionManager(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application startup and shutdown lifecycle."""
-    logger.info("Starting A2A Treasury Network...")
+    logger.info("Starting Cadencia Commerce Network...")
     await redis_manager.connect()
     logger.info("Redis connected.")
 
@@ -119,11 +119,10 @@ async def lifespan(app: FastAPI):
 
 # ─── App factory ─────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="A2A Treasury Network",
+    title="Cadencia Commerce Network",
     description="""
-## Agentic Commerce Framework (ACF)
+## Cadencia — Agentic Commerce Framework (ACF)
 Autonomous machine-to-machine B2B commerce on Algorand.
-AlgoBharat Hackathon — Problem 7.
 
 ### Framework Layers
 - **Discovery**: Agent registry, capability handshake
@@ -221,7 +220,7 @@ except ImportError as e:
 async def root():
     """API root. Use /health for liveness, /docs for Swagger."""
     return {
-        "service": "A2A Treasury Network",
+        "service": "Cadencia Commerce Network",
         "version": APP_VERSION,
         "health": "/health",
         "docs": "/docs",
@@ -233,7 +232,7 @@ async def root():
 async def global_agent_card():
     """Serve the global ACF Agent Card (framework-level, not enterprise-specific)."""
     return {
-        "name": "A2A Treasury Network Agent",
+        "name": "Cadencia Commerce Network Agent",
         "version": "1.0.0",
         "protocols": [{"id": "DANP-v1"}, {"id": "FixedPrice-v1"}],
         "settlement_networks": ["algorand-testnet"],
@@ -281,18 +280,13 @@ async def _check_redis():
 async def _check_algorand():
     start = time.perf_counter()
     try:
-        from blockchain.algo_client import AlgorandClient
-        client = AlgorandClient()
-        sdk = getattr(client, "sdk_available", False)
-        network = os.getenv("ALGORAND_NETWORK", "testnet")
-        if not sdk:
-            return {"status": "degraded", "network": network, "sdk_available": False, "latency_ms": None, "detail": "SDK not available"}
-        await asyncio.wait_for(client.get_suggested_params(), timeout=HEALTH_CHECK_TIMEOUT)
-        return {"status": "ok", "network": network, "sdk_available": True, "latency_ms": (time.perf_counter() - start) * 1000, "detail": None}
-    except asyncio.TimeoutError:
-        return {"status": "error", "network": "unknown", "sdk_available": False, "latency_ms": None, "detail": "timeout"}
+        from blockchain.sdk_client import get_algorand_client
+        client = get_algorand_client()
+        result = client.health_check()
+        result["latency_ms"] = (time.perf_counter() - start) * 1000
+        return result
     except Exception as e:
-        return {"status": "degraded", "network": "unknown", "sdk_available": False, "latency_ms": None, "detail": str(e)}
+        return {"healthy": False, "network": "unknown", "latency_ms": None, "error": str(e)}
 
 
 async def _check_groq_llm():
@@ -323,7 +317,7 @@ async def health_check(response: Response):
 
     db_ok = db_c.get("status") == "ok"
     redis_ok = redis_c.get("status") == "ok"
-    algo_ok = algo_c.get("status") in ("ok", "degraded")
+    algo_ok = algo_c.get("healthy", False) or algo_c.get("status") in ("ok", "degraded")
     groq_ok = groq_c.get("status") in ("ok", "degraded")
     fx_ok = fx_c.get("status") in ("ok", "degraded")
 

@@ -6,13 +6,10 @@ Implements x402 semantics with Algorand native payment transactions:
   - sign_payment_algorand()        — buyer agent side (sign tx)
   - verify_and_submit_payment()    — server middleware (verify + broadcast)
 
-Simulation mode is ON by default. Real Algorand testnet broadcast
-requires funded wallets and X402_SIMULATION_MODE=false.
+Production mode requires funded wallets. No SIM- fallback in production path.
 """
 from __future__ import annotations
 
-import base64
-import hashlib
 import logging
 import os
 import time
@@ -25,17 +22,8 @@ logger = logging.getLogger("a2a_treasury")
 # Algorand testnet explorer (Lora / AlgoKit official)
 EXPLORER_BASE = "https://lora.algokit.io/testnet"
 
-# Demo cap: max on-chain payment in microAlgos (default 0.01 ALGO = 10000)
-# Keeps real tx cheap for hackathon wallets with limited ALGO
-DEMO_AMOUNT_MICRO = int(os.environ.get("X402_DEMO_AMOUNT_MICRO", "10000"))
-
-# Try importing algosdk — gracefully degrade if not available
-try:
-    from algosdk import account, mnemonic, transaction, encoding
-    from algosdk.v2client import algod
-    ALGOSDK_AVAILABLE = True
-except ImportError:
-    ALGOSDK_AVAILABLE = False
+from algosdk import account, mnemonic, transaction, encoding
+from algosdk.v2client import algod
 
 
 class X402Handler:
@@ -55,29 +43,20 @@ class X402Handler:
         self.seller_mnemonic = os.getenv("SELLER_WALLET_MNEMONIC", "")
         self.seller_address = os.getenv("SELLER_WALLET_ADDRESS", "")
 
-        # SDK availability check
-        self.sdk_available = ALGOSDK_AVAILABLE
-        self.algod_client = None
+        self.algod_client: Optional[algod.AlgodClient] = None
 
-        if ALGOSDK_AVAILABLE:
-            try:
-                self.algod_client = algod.AlgodClient(
-                    self.algod_token, self.algod_address
-                )
-                # Quick connectivity test
-                status = self.algod_client.status()
-                logger.info(
-                    "x402 Algod connected | network=%s | round=%s",
-                    self.network, status.get("last-round", "?"),
-                )
-            except Exception as e:
-                logger.warning("x402 Algod connection failed: %s", e)
-                self.algod_client = None
-
-    @property
-    def simulation_mode(self) -> bool:
-        """Read X402_SIMULATION_MODE at call time (not import time)."""
-        return os.getenv("X402_SIMULATION_MODE", "true").lower() == "true"
+        try:
+            self.algod_client = algod.AlgodClient(
+                self.algod_token, self.algod_address
+            )
+            status = self.algod_client.status()
+            logger.info(
+                "x402 Algod connected | network=%s | round=%s",
+                self.network, status.get("last-round", "?"),
+            )
+        except Exception as e:
+            logger.warning("x402 Algod connection failed: %s", e)
+            self.algod_client = None
 
     # ──────────────────────────────────────────────────────────────────
     # SELLER SIDE — build 402 response
@@ -94,18 +73,15 @@ class X402Handler:
         """
         Build HTTP 402 response body per x402 spec.
         amount_usdc converted to micro (6 decimals).
-        On-chain amount capped to DEMO_AMOUNT_MICRO for hackathon demo.
         """
         full_micro_usdc = int(amount_usdc * 1_000_000)
-        # Cap on-chain amount for demo (wallets have limited ALGO)
-        onchain_micro = min(full_micro_usdc, DEMO_AMOUNT_MICRO)
         return {
             "x402Version": 1,
             "accepts": [
                 {
                     "scheme": "exact",
                     "network": self.network,
-                    "maxAmountRequired": str(onchain_micro),
+                    "maxAmountRequired": str(full_micro_usdc),
                     "asset": "ALGO-NATIVE",
                     "payTo": escrow_address,
                     "extra": {
@@ -114,9 +90,8 @@ class X402Handler:
                         "fx_rate": fx_rate,
                         "full_usdc_equivalent": amount_usdc,
                         "full_micro": full_micro_usdc,
-                        "demo_capped": onchain_micro < full_micro_usdc,
                         "description": (
-                            "A2A Treasury Network — "
+                            "Cadencia Commerce Network — "
                             "autonomous trade settlement"
                         ),
                     },
@@ -137,64 +112,47 @@ class X402Handler:
     ) -> str:
         """
         Sign an Algorand payment tx from the x402 402 response body.
-        Returns base64-encoded signed transaction (or SIM token).
+        Returns base64-encoded signed transaction.
+        Raises ValueError if wallet is not configured.
         """
         accepts = payment_requirements.get("accepts", [{}])[0]
         session_id = accepts.get("extra", {}).get("session_id", "unknown")
 
-        # Use provided or env mnemonics
         mn = buyer_mnemonic or self.buyer_mnemonic
         addr = buyer_address or self.buyer_address
 
-        if self.simulation_mode or not ALGOSDK_AVAILABLE or not mn:
-            sim_hash = hashlib.sha256(
-                session_id.encode()
-            ).hexdigest()[:16].upper()
-            return f"SIM-X402-ALGO-{sim_hash}"
+        if not mn or not addr:
+            raise ValueError("Buyer wallet mnemonic/address not configured for x402 signing")
 
-        # ── LIVE: Sign a real Algorand PaymentTxn ──
-        try:
-            private_key = mnemonic.to_private_key(mn)
-            pay_to = accepts["payTo"]
-            amount_micro = int(accepts["maxAmountRequired"])
+        if not self.algod_client:
+            raise ValueError("Algod client not available for x402 signing")
 
-            # Always fetch fresh suggested params so first_valid/last_valid
-            # are up-to-date for each transaction.
-            params = self.algod_client.suggested_params()
-            params.flat_fee = True
-            params.fee = 1000  # 0.001 ALGO min fee
+        private_key = mnemonic.to_private_key(mn)
+        pay_to = accepts["payTo"]
+        amount_micro = int(accepts["maxAmountRequired"])
 
-            # Add a small random nonce in the note so that even if the params
-            # land in the same block window, the tx bytes (and thus txID)
-            # are unique across simulation runs.
-            nonce = f"{int(time.time())}-{os.urandom(4).hex()}"
-            note = f"x402:a2a-treasury:session:{session_id}:{nonce}".encode()
+        params = self.algod_client.suggested_params()
+        params.flat_fee = True
+        params.fee = 1000  # 0.001 ALGO min fee
 
-            # Create payment transaction (amount in microAlgos)
-            txn = transaction.PaymentTxn(
-                sender=addr,
-                sp=params,
-                receiver=pay_to,
-                amt=amount_micro,
-                note=note,
-            )
-            signed_txn = txn.sign(private_key)
+        nonce = f"{int(time.time())}-{os.urandom(4).hex()}"
+        note = f"x402:cadencia:session:{session_id}:{nonce}".encode()
 
-            # Serialize using algosdk's built-in msgpack_encode (returns base64 string)
-            encoded = encoding.msgpack_encode(signed_txn)
+        txn = transaction.PaymentTxn(
+            sender=addr,
+            sp=params,
+            receiver=pay_to,
+            amt=amount_micro,
+            note=note,
+        )
+        signed_txn = txn.sign(private_key)
+        encoded = encoding.msgpack_encode(signed_txn)
 
-            logger.info(
-                "x402 LIVE payment signed | session=%s | sender=%s | receiver=%s | amt=%d",
-                session_id[:8], addr[:12], pay_to[:12], amount_micro,
-            )
-            return encoded
-        except Exception as e:
-            logger.error("x402 LIVE sign failed: %s", e)
-            # Fall back to simulation token
-            sim_hash = hashlib.sha256(
-                session_id.encode()
-            ).hexdigest()[:16].upper()
-            return f"SIM-X402-ALGO-{sim_hash}"
+        logger.info(
+            "x402 payment signed | session=%s | sender=%s | receiver=%s | amt=%d",
+            session_id[:8], addr[:12], pay_to[:12], amount_micro,
+        )
+        return encoded
 
     # ──────────────────────────────────────────────────────────────────
     # SERVER MIDDLEWARE — verify + submit payment
@@ -209,54 +167,32 @@ class X402Handler:
     ) -> dict:
         """
         Verify X-PAYMENT header, broadcast to Algorand.
-
-        SIMULATION MODE: Accept SIM-X402-ALGO-... token as valid.
-        LIVE MODE: Decode signed txn, broadcast to Algorand testnet,
-                   wait for confirmation, return real tx ID.
+        Signs and submits a fresh payment transaction.
+        No SIM- tokens accepted in production.
         """
-        # ── SIMULATION PATH ──
-        if self.simulation_mode or not ALGOSDK_AVAILABLE or not self.algod_client:
-            if not (
-                x_payment_header.startswith("SIM-X402-ALGO-")
-                or x_payment_header.startswith("SIM-X402-")
-            ):
-                raise HTTPException(
-                    status_code=402,
-                    detail={
-                        "error": "INVALID_PAYMENT_TOKEN",
-                        "reason": (
-                            "Expected SIM-X402-ALGO- "
-                            "prefix in simulation mode"
-                        ),
-                    },
-                )
-            sim_hash = hashlib.sha256(
-                session_id.encode()
-            ).hexdigest()[:16].upper()
-            tx_id = f"SIM-ALGOTX-{sim_hash}"
-            logger.info(
-                "x402 SIM payment accepted | "
-                "session=%s | tx_id=%s",
-                session_id[:8],
-                tx_id,
+        if not self.algod_client:
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "error": "ALGOD_UNAVAILABLE",
+                    "reason": "Algorand node is not connected",
+                },
             )
-            return {
-                "verified": True,
-                "tx_id": tx_id,
-                "amount_micro": expected_amount_micro,
-                "network": self.network,
-                "simulation": True,
-                "confirmed_round": None,
-                "explorer_url": None,
-            }
 
-        # ── LIVE: Submit real transaction to Algorand testnet ──
+        # Reject SIM- tokens in production
+        if x_payment_header.startswith("SIM-"):
+            raise HTTPException(
+                status_code=402,
+                detail={
+                    "error": "SIMULATION_NOT_ACCEPTED",
+                    "reason": "SIM- tokens are not accepted in production mode",
+                },
+            )
+
         try:
             x_payment_header = x_payment_header.strip()
-            logger.info("x402 LIVE received token length: %s", len(x_payment_header))
+            logger.info("x402 received token length: %s", len(x_payment_header))
 
-            # Instead of decoding a pre-signed tx (which has msgpack issues),
-            # sign and submit a fresh payment directly here
             mn = self.buyer_mnemonic
             addr = self.buyer_address
             if not mn or not addr:
@@ -268,11 +204,10 @@ class X402Handler:
             params.fee = 1000
 
             nonce = f"{int(time.time())}-{os.urandom(4).hex()}"
-            note = f"x402:a2a-treasury:pay:{session_id}:{nonce}".encode()
+            note = f"x402:cadencia:pay:{session_id}:{nonce}".encode()
 
-            # Payment from buyer to seller (or escrow)
             pay_to = expected_pay_to or self.seller_address
-            amt = min(expected_amount_micro, DEMO_AMOUNT_MICRO)
+            amt = expected_amount_micro
 
             txn = transaction.PaymentTxn(
                 sender=addr,
@@ -285,7 +220,7 @@ class X402Handler:
             tx_id = self.algod_client.send_transaction(signed_txn)
 
             logger.info(
-                "x402 LIVE tx broadcast | session=%s | tx_id=%s | amt=%d",
+                "x402 tx broadcast | session=%s | tx_id=%s | amt=%d",
                 session_id[:8], tx_id, amt,
             )
 
@@ -297,12 +232,12 @@ class X402Handler:
                 )
                 confirmed_round = result.get("confirmed-round")
                 logger.info(
-                    "x402 LIVE tx confirmed | tx_id=%s | round=%s",
+                    "x402 tx confirmed | tx_id=%s | round=%s",
                     tx_id, confirmed_round,
                 )
             except Exception as conf_err:
                 logger.warning(
-                    "x402 LIVE tx broadcast OK but confirmation timeout: %s",
+                    "x402 tx broadcast OK but confirmation timeout: %s",
                     conf_err,
                 )
 
@@ -318,12 +253,12 @@ class X402Handler:
                 "explorer_url": explorer_url,
             }
 
+        except HTTPException:
+            raise
         except Exception as e:
             error_msg = str(e)
-            logger.error("x402 LIVE payment failed: %s", error_msg)
+            logger.error("x402 payment failed: %s", error_msg)
 
-            # If it's an encoding/submission error, still try to
-            # give a meaningful response
             if "overspend" in error_msg.lower():
                 raise HTTPException(
                     status_code=402,
@@ -349,7 +284,7 @@ class X402Handler:
 
     def get_explorer_url(self, tx_id: str) -> str:
         """Get the Lora explorer URL for a transaction."""
-        if tx_id.startswith("SIM-"):
+        if not tx_id:
             return ""
         return f"{EXPLORER_BASE}/transaction/{tx_id}"
 

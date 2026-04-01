@@ -1,11 +1,22 @@
 """
-blockchain/algo_client.py — Algorand SDK wrapper.
+blockchain/algo_client.py — DEPRECATED.
+
+Replaced by blockchain/sdk_client.py in Phase 1 (Cadencia cleanup).
+Kept for backward compatibility with demo routes only.
+Do NOT import this module in any new code.
 
 Uses ONLY algosdk (py-algorand-sdk). No Web3, no EVM.
 All operations target Algorand testnet (AlgoNode).
 Gracefully degrades when algosdk is not installed or mnemonic is missing.
 """
 from __future__ import annotations
+
+import warnings
+warnings.warn(
+    "blockchain.algo_client is deprecated. Use blockchain.sdk_client instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 import logging
 import os

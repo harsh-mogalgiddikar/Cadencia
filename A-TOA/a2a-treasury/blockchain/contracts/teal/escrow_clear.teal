@@ -1,0 +1,6 @@
+#pragma version 10
+// TreasuryEscrow Clear State Program
+// Pre-compiled from blockchain/contracts/treasury_escrow.py
+// Always approves clear-state — allows app deletion cleanup.
+int 1
+return

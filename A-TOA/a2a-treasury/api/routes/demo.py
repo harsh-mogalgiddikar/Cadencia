@@ -1,6 +1,9 @@
 """
 Demo orchestration endpoint.
-Runs the full A2A Treasury flow end-to-end and streams progress via SSE.
+Runs the full Cadencia Commerce flow end-to-end and streams progress via SSE.
+
+GATED: Only available when ADMIN_DEMO_ENABLED=true environment variable is set.
+In production, this module's routes return 404.
 
 Flow:
   Phase 1  — Seed buyer + seller enterprises (or reuse existing demo accounts)
@@ -25,7 +28,7 @@ import uuid
 from decimal import Decimal
 
 import bcrypt
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
 from typing import AsyncGenerator
@@ -34,6 +37,8 @@ from db.models import Enterprise, User, AgentConfig, TreasuryPolicy, Wallet
 from db.database import get_session_factory
 
 logger = logging.getLogger("a2a_treasury")
+
+DEMO_ENABLED = os.getenv("ADMIN_DEMO_ENABLED", "false").lower() == "true"
 
 router = APIRouter(prefix="/v1/demo", tags=["Demo"])
 
@@ -836,6 +841,8 @@ async def run_demo(
     seller_wallet: str = "",
     live_mode:     bool = False,
 ):
+    if not DEMO_ENABLED:
+        raise HTTPException(404, "Demo mode is disabled. Set ADMIN_DEMO_ENABLED=true to enable.")
     return StreamingResponse(
         run_demo_flow(
             buyer_wallet=buyer_wallet or os.getenv("DEMO_BUYER_WALLET", ""),
@@ -853,6 +860,8 @@ async def run_demo(
 @router.get("/mode")
 async def get_demo_mode():
     """Returns whether demo is running in LIVE or SIMULATION mode."""
+    if not DEMO_ENABLED:
+        raise HTTPException(404, "Demo mode is disabled. Set ADMIN_DEMO_ENABLED=true to enable.")
     simulation = os.getenv("ALGORAND_SIMULATION", "true").lower() == "true"
     anchor = os.getenv("ANCHOR_ENABLED", "false").lower() == "true"
     x402_sim = os.getenv("X402_SIMULATION_MODE", "true").lower() == "true"

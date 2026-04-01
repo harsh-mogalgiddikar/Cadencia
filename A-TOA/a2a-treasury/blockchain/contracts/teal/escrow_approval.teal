@@ -1,0 +1,253 @@
+#pragma version 10
+// TreasuryEscrow Approval Program
+// Pre-compiled from blockchain/contracts/treasury_escrow.py
+// This is a static asset — do NOT modify at runtime.
+//
+// Contract State:
+//   Global: buyer_address(bytes), seller_address(bytes), platform_address(bytes),
+//           session_id(bytes), merkle_root(bytes),
+//           agreed_amount_usdc(uint64), status(uint64), fx_rate_locked(uint64),
+//           funded_at_round(uint64)
+//
+// Status constants:
+//   0 = PENDING, 1 = FUNDED, 2 = RELEASED, 3 = REFUNDED, 4 = DISPUTED
+//
+// ABI Methods:
+//   init(address,address,address,byte[],uint64,uint64)void
+//   opt_in_to_usdc()void
+//   fund(axfer,byte[])void
+//   release(byte[])void
+//   refund(byte[])void
+//   dispute()void
+//   get_status()uint64
+//   get_details()(byte[],byte[],uint64,uint64)
+
+// ─── Bare App Create ──────────────────────────────────────────────
+txn ApplicationID
+int 0
+==
+bnz handle_create
+
+// ─── Route ABI method calls ──────────────────────────────────────
+txn OnCompletion
+int NoOp
+==
+bnz handle_noop
+
+txn OnCompletion
+int DeleteApplication
+==
+bnz handle_delete
+
+// Default: reject
+err
+
+handle_create:
+// Initialize global state with defaults
+byte "status"
+int 0
+app_global_put
+byte "agreed_amount_usdc"
+int 0
+app_global_put
+byte "fx_rate_locked"
+int 0
+app_global_put
+byte "funded_at_round"
+int 0
+app_global_put
+byte "buyer_address"
+byte ""
+app_global_put
+byte "seller_address"
+byte ""
+app_global_put
+byte "platform_address"
+byte ""
+app_global_put
+byte "session_id"
+byte ""
+app_global_put
+byte "merkle_root"
+byte ""
+app_global_put
+int 1
+return
+
+handle_delete:
+// Only creator can delete
+txn Sender
+global CreatorAddress
+==
+assert
+int 1
+return
+
+handle_noop:
+// Route by first app arg
+txna ApplicationArgs 0
+byte "init"
+==
+bnz handle_init
+
+txna ApplicationArgs 0
+byte "fund"
+==
+bnz handle_fund
+
+txna ApplicationArgs 0
+byte "release"
+==
+bnz handle_release
+
+txna ApplicationArgs 0
+byte "refund"
+==
+bnz handle_refund
+
+txna ApplicationArgs 0
+byte "dispute"
+==
+bnz handle_dispute
+
+// Unknown method
+err
+
+handle_init:
+// Only creator can init
+txn Sender
+global CreatorAddress
+==
+assert
+// Must be PENDING (status == 0)
+byte "status"
+app_global_get
+int 0
+==
+assert
+// Store buyer address (arg 1)
+byte "buyer_address"
+txna ApplicationArgs 1
+app_global_put
+// Store seller address (arg 2)
+byte "seller_address"
+txna ApplicationArgs 2
+app_global_put
+// Store platform address (arg 3)
+byte "platform_address"
+txna ApplicationArgs 3
+app_global_put
+// Store session_id (arg 4)
+byte "session_id"
+txna ApplicationArgs 4
+app_global_put
+// Store amount (arg 5) — 8-byte big-endian uint64
+byte "agreed_amount_usdc"
+txna ApplicationArgs 5
+btoi
+app_global_put
+// Store fx_rate (arg 6)
+byte "fx_rate_locked"
+txna ApplicationArgs 6
+btoi
+app_global_put
+int 1
+return
+
+handle_fund:
+// Only buyer can fund
+txn Sender
+byte "buyer_address"
+app_global_get
+==
+assert
+// Must be PENDING
+byte "status"
+app_global_get
+int 0
+==
+assert
+// Set status = FUNDED (1)
+byte "status"
+int 1
+app_global_put
+// Record funded round
+byte "funded_at_round"
+global Round
+app_global_put
+int 1
+return
+
+handle_release:
+// Only platform or buyer can release
+txn Sender
+byte "platform_address"
+app_global_get
+==
+txn Sender
+byte "buyer_address"
+app_global_get
+==
+||
+assert
+// Must be FUNDED
+byte "status"
+app_global_get
+int 1
+==
+assert
+// Store merkle_root (arg 1)
+byte "merkle_root"
+txna ApplicationArgs 1
+app_global_put
+// Set status = RELEASED (2)
+byte "status"
+int 2
+app_global_put
+int 1
+return
+
+handle_refund:
+// Only platform can refund
+txn Sender
+byte "platform_address"
+app_global_get
+==
+assert
+// Must be FUNDED
+byte "status"
+app_global_get
+int 1
+==
+assert
+// Set status = REFUNDED (3)
+byte "status"
+int 3
+app_global_put
+int 1
+return
+
+handle_dispute:
+// Only buyer or seller can dispute
+txn Sender
+byte "buyer_address"
+app_global_get
+==
+txn Sender
+byte "seller_address"
+app_global_get
+==
+||
+assert
+// Must be FUNDED
+byte "status"
+app_global_get
+int 1
+==
+assert
+// Set status = DISPUTED (4)
+byte "status"
+int 4
+app_global_put
+int 1
+return

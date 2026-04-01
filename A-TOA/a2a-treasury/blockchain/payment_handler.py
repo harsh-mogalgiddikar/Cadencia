@@ -1,14 +1,16 @@
 """
 blockchain/payment_handler.py — USDC ASA transfer on Algorand.
 
-Dry-run simulation before every transfer. Uses algosdk only.
+Uses algosdk only via the centralized sdk_client.
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from typing import Any
 
+from blockchain.sdk_client import get_algorand_client
 from db.audit_logger import AuditLogger
 
 logger = logging.getLogger("a2a_treasury")
@@ -16,37 +18,12 @@ audit_logger = AuditLogger()
 
 ALGORAND_USDC_ASSET_ID = int(os.getenv("ALGORAND_USDC_ASSET_ID", "10458941"))
 
-try:
-    from blockchain.algo_client import AlgorandClient
-    _client: Any = None
-
-    def _get_client() -> Any:
-        global _client
-        if _client is None:
-            _client = AlgorandClient()
-        return _client
-except Exception:
-    def _get_client() -> Any:
-        raise RuntimeError("Algorand client not available")
-
 
 class PaymentHandler:
     """USDC ASA transfers on Algorand testnet."""
 
-    async def simulate_usdc_transfer(
-        self,
-        from_address: str,
-        to_address: str,
-        amount_microusdc: int,
-        asset_id: int,
-    ) -> bool:
-        """Dry-run USDC transfer. Returns True if transfer would succeed."""
-        try:
-            client = _get_client()
-            await client.simulate_transaction(None)
-            return True
-        except Exception:
-            return False
+    def __init__(self):
+        self._sdk = get_algorand_client()
 
     async def execute_usdc_transfer(
         self,
@@ -56,14 +33,12 @@ class PaymentHandler:
         asset_id: int,
         note: str = "",
     ) -> str:
-        """Execute USDC ASA transfer. Returns tx_ref. Retry with tenacity."""
-        from algosdk.future import transaction as txn
-        from algosdk import account
+        """Execute USDC ASA transfer. Returns tx_id."""
+        from algosdk import transaction, account
 
-        client = _get_client()
-        sp = client.algod.suggested_params()
+        sp = self._sdk.get_suggested_params()
         sender = account.address_from_private_key(sender_private_key)
-        txn_obj = txn.AssetTransferTxn(
+        txn = transaction.AssetTransferTxn(
             sender=sender,
             sp=sp,
             receiver=receiver_address,
@@ -71,16 +46,18 @@ class PaymentHandler:
             index=asset_id,
             note=note.encode() if note else None,
         )
-        signed = txn_obj.sign(sender_private_key)
-        tx_ref = await client.submit_transaction(signed)
-        return tx_ref
+        signed = txn.sign(sender_private_key)
+        result = self._sdk.submit_and_wait(signed)
+        return result["txid"]
 
     async def get_usdc_balance(self, address: str) -> float:
         """USDC balance in human-readable units (divide by 1e6)."""
         try:
-            client = _get_client()
-            bal = await client.get_asset_balance(address, ALGORAND_USDC_ASSET_ID)
-            return bal / 1_000_000.0
+            info = self._sdk.get_account_info(address)
+            for asset in info.get("assets", []):
+                if asset["asset-id"] == ALGORAND_USDC_ASSET_ID:
+                    return asset.get("amount", 0) / 1_000_000.0
+            return 0.0
         except Exception:
             return 0.0
 
@@ -105,13 +82,10 @@ class PaymentHandler:
     MAX_CONFIRMATION_ROUNDS = 10
 
     async def wait_for_confirmation(self, tx_id: str) -> dict:
-        """Wait up to MAX_CONFIRMATION_ROUNDS for tx confirmation on Algorand."""
-        import asyncio
-
-        client = _get_client()
+        """Wait up to MAX_CONFIRMATION_ROUNDS for tx confirmation."""
         for attempt in range(self.MAX_CONFIRMATION_ROUNDS):
             try:
-                result = await client.pending_transaction_info(tx_id)
+                result = self._sdk.algod.pending_transaction_info(tx_id)
                 if result and result.get("confirmed-round"):
                     return result
             except Exception:

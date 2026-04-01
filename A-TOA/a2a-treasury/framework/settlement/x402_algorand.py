@@ -8,7 +8,6 @@ SettlementProvider interface without changing underlying payment logic.
 
 from __future__ import annotations
 
-import os
 from typing import Dict, List
 
 from blockchain.escrow_manager import escrow_manager
@@ -91,7 +90,7 @@ class X402AlgorandSettlement(SettlementProvider):
             "network": result.get("network"),
             "amount_settled": expected_amount,
             "idempotent": False,
-            "simulation": result.get("simulation", True),
+            "simulation": False,
             "confirmed_round": result.get("confirmed_round"),
         }
 
@@ -104,9 +103,6 @@ class X402AlgorandSettlement(SettlementProvider):
     ) -> Dict:
         """
         Deploy an escrow contract for the session via EscrowManager.
-
-        This uses the same payload structure as EscrowManager.generate_escrow_payload,
-        treating the supplied amount as USDC equivalent.
         """
         session_dict = {
             "session_id": session_id,
@@ -124,43 +120,32 @@ class X402AlgorandSettlement(SettlementProvider):
         return {
             "escrow_address": deploy_result.get("escrow_address", ""),
             "contract_ref": deploy_result.get("contract_ref", ""),
-            "network": deploy_result.get("network_id") or deploy_result.get("network", ""),
+            "network": deploy_result.get("network_id", ""),
             "status": deploy_result.get("status", "AWAITING_PAYMENT"),
         }
 
     async def release_escrow(self, escrow_address: str, session_id: str) -> Dict:
         """
         Release escrow funds to seller.
-
-        For the current codebase, escrow release is orchestrated via higher
-        level flows that already call EscrowManager directly. This adapter
-        method is reserved for future use and is not wired yet.
+        Reserved for Phase 2 — not wired in this phase.
         """
-        # TODO: Phase 2 — wire to escrow_manager.release_escrow with proper DB context.
         raise NotImplementedError("X402AlgorandSettlement.release_escrow is not wired in this phase")
 
     async def refund_escrow(self, escrow_address: str, session_id: str) -> Dict:
         """
         Refund escrow to buyer.
-
-        For the current codebase, escrow refunds are orchestrated via higher
-        level flows that already call EscrowManager directly. This adapter
-        method is reserved for future use and is not wired yet.
+        Reserved for Phase 2 — not wired in this phase.
         """
-        # TODO: Phase 2 — wire to escrow_manager.refund_escrow with proper DB context.
         raise NotImplementedError("X402AlgorandSettlement.refund_escrow is not wired in this phase")
 
     @classmethod
     def get_capabilities(cls) -> SettlementCapabilities:
         """Return static capabilities for discovery APIs."""
-        simulation_mode_env = os.getenv("X402_SIMULATION_MODE", "true").lower()
-        simulation_mode = simulation_mode_env == "true"
         return SettlementCapabilities(
             provider_id="x402-algorand-testnet",
             supported_networks=["algorand-testnet"],
             supported_payment_methods=["x402"],
             supports_escrow=True,
-            supports_live_transactions=not simulation_mode,
-            simulation_mode=simulation_mode,
+            supports_live_transactions=True,
+            simulation_mode=False,
         )
-

@@ -1,9 +1,20 @@
 """
-blockchain/simulation.py — Dry-run simulation before broadcast.
+blockchain/simulation.py — DEPRECATED.
 
-RULE 07: Escrow NEVER deployed without dry-run simulation passing first.
+Replaced by blockchain/sdk_client.py dry_run() method in Phase 1 (Cadencia cleanup).
+This module is kept only for backward compatibility.
+Do NOT import in new code.
+
+Original: RULE 07: Escrow NEVER deployed without dry-run simulation passing first.
 """
 from __future__ import annotations
+
+import warnings
+warnings.warn(
+    "blockchain.simulation is deprecated. Use blockchain.sdk_client.dry_run() instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 from typing import Any
 

@@ -368,6 +368,8 @@ class EscrowContract(Base):
     refund_tx_id = Column(String(128), nullable=True)
     refunded_at = Column(DateTime(timezone=True), nullable=True)
     refund_reason = Column(Text, nullable=True)
+    # Phase 1: Algorand deployment transaction ID
+    deploy_txid = Column(String(128), nullable=True)
 
 
 # ─── settlements ────────────────────────────────────────────────────────────────
